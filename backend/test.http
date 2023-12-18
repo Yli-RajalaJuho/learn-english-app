@@ -1,0 +1,17 @@
+###
+get http://localhost:8080/
+
+###
+get http://localhost:8080/api/words/
+
+###
+get http://localhost:8080/api/words/1
+
+###
+delete http://localhost:8080/api/words/1
+
+###
+post http://localhost:8080/api/words/
+content-type: application/json
+
+{ "english_word": "Finland", "finnish_word": "Suomi", "category_tags": "country"}
