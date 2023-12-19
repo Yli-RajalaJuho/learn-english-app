@@ -1,22 +1,12 @@
 const Ajv = require("ajv");
 const ajv = new Ajv();
-
-const schema = {
-  type: "object",
-  properties: {
-    english_word: { type: "string" },
-    finnish_word: { type: "string" },
-    category_tags: { type: "string" },
-  },
-  required: ["english_word", "finnish_word"],
-  additionalProperties: false,
-};
+const schemas = require("./schemas");
 
 module.exports = {
   save: (connection, data) => {
     return new Promise((resolve, reject) => {
       try {
-        const validate = ajv.compile(schema);
+        const validate = ajv.compile(schemas.basicSchema);
         const isValid = validate(data);
 
         if (!isValid) {
@@ -170,6 +160,177 @@ module.exports = {
             resolve(204);
           }
         });
+      } catch (error) {
+        // Server Error
+        console.error(error);
+        reject(500);
+      }
+    });
+  },
+
+  put: (connection, id, data) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const validate = ajv.compile(schemas.putSchema);
+        const isValid = validate(data);
+
+        // Check if the location exists
+        connection.query(
+          "SELECT * FROM Words WHERE id = ?",
+          [id],
+          (selectErr, result) => {
+            if (selectErr) {
+              // Server Error
+              console.error(selectErr);
+              reject(500);
+            } else if (result.length === 0) {
+              // Not found
+              reject({
+                code: 404,
+                message: `Word with ID: ${id} not found`,
+              });
+            } else if (!isValid) {
+              // Bad Request
+              reject({
+                code: 400,
+                message: validate.errors,
+              });
+            } else {
+              // Update the location
+              const english_word = data.english_word;
+              const finnish_word = data.finnish_word;
+              const category_tags = data.category_tags;
+
+              connection.query(
+                "UPDATE Words SET english_word = ?, finnish_word = ?, category_tags = ? WHERE id = ?",
+                [english_word, finnish_word, category_tags, id],
+                (updateErr) => {
+                  if (updateErr) {
+                    // Server Error
+                    console.error(updateErr);
+                    reject(500);
+                  } else {
+                    // Valid: No Content
+                    resolve(204);
+                  }
+                }
+              );
+            }
+          }
+        );
+      } catch (error) {
+        // Server Error
+        console.error(error);
+        reject(500);
+      }
+    });
+  },
+
+  patch: (connection, id, data) => {
+    return new Promise((resolve, reject) => {
+      try {
+        const validate = ajv.compile(schemas.patchSchema);
+        const isValid = validate(data);
+
+        // Check if the location exists
+        connection.query(
+          "SELECT * FROM Words WHERE id = ?",
+          [id],
+          (selectErr, result) => {
+            if (selectErr) {
+              // Server Error
+              console.error(selectErr);
+              reject(500);
+            } else if (result.length === 0) {
+              // Not found
+              reject({
+                code: 404,
+                message: `Word with ID: ${id} not found`,
+              });
+            } else if (!isValid) {
+              // Bad Request
+              reject({
+                code: 400,
+                message: validate.errors,
+              });
+            } else {
+              // Get the data
+              const english_word = data.english_word;
+              const finnish_word = data.finnish_word;
+              const category_tags = data.category_tags;
+
+              // Update english word
+              updateEng = () => {
+                connection.query(
+                  "UPDATE Words SET english_word = ? WHERE id = ?",
+                  [english_word, id],
+                  (updateErr) => {
+                    if (updateErr) {
+                      // Server Error
+                      console.error(updateErr);
+                      reject(500);
+                    } else {
+                      // Valid: No Content
+                      resolve(204);
+                    }
+                  }
+                );
+              };
+
+              // Update finnish word
+              updateFin = () => {
+                connection.query(
+                  "UPDATE Words SET finnish_word = ? WHERE id = ?",
+                  [finnish_word, id],
+                  (updateErr) => {
+                    if (updateErr) {
+                      // Server Error
+                      console.error(updateErr);
+                      reject(500);
+                    } else {
+                      // Valid: No Content
+                      resolve(204);
+                    }
+                  }
+                );
+              };
+
+              // Update tags
+              updateTags = () => {
+                connection.query(
+                  "UPDATE Words SET category_tags = ? WHERE id = ?",
+                  [category_tags, id],
+                  (updateErr) => {
+                    if (updateErr) {
+                      // Server Error
+                      console.error(updateErr);
+                      reject(500);
+                    } else {
+                      // Valid: No Content
+                      resolve(204);
+                    }
+                  }
+                );
+              };
+              console.log(english_word, finnish_word, category_tags);
+
+              // Switch statement to check and execute update functions
+              switch (true) {
+                case english_word !== undefined:
+                  updateEng();
+                case finnish_word !== undefined:
+                  updateFin();
+                case category_tags !== undefined:
+                  updateTags();
+                  break;
+                default:
+                  // Bad Request
+                  reject(400);
+                  break;
+              }
+            }
+          }
+        );
       } catch (error) {
         // Server Error
         console.error(error);

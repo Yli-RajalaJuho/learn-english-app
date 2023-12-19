@@ -14,4 +14,16 @@ delete http://localhost:8080/api/words/1
 post http://localhost:8080/api/words/
 content-type: application/json
 
-{ "english_word": "Finland", "finnish_word": "Suomi", "category_tags": "country"}
+{ "english_word": "France", "finnish_word": "Ranska", "category_tags": "country"}
+
+###
+put http://localhost:8080/api/words/0
+content-type: application/json
+
+{ "english_word": "Sweden", "finnish_word": "Ruotsi", "category_tags": "countries" }
+
+###
+patch http://localhost:8080/api/words/3
+content-type: application/json
+
+{ "category_tags": "countries"}

@@ -159,7 +159,6 @@ wordsRouter.delete("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-/*
 // PUT ->
 wordsRouter.put("/:myId([0-9]+)", async (req, res) => {
   let connection = undefined;
@@ -233,6 +232,5 @@ wordsRouter.patch("/:myId([0-9]+)", async (req, res) => {
     }
   }
 });
-*/
 
 module.exports = wordsRouter;
