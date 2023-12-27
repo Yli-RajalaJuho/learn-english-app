@@ -2,8 +2,8 @@ module.exports = {
   basicSchema: {
     type: "object",
     properties: {
-      english_word: { type: "string" },
-      finnish_word: { type: "string" },
+      english_word: { type: "string", minLength: 1 },
+      finnish_word: { type: "string", minLength: 1 },
       category_tags: { type: "string" },
     },
     required: ["english_word", "finnish_word"],
@@ -14,8 +14,8 @@ module.exports = {
     type: "object",
     properties: {
       id: { type: "integer" },
-      english_word: { type: "string" },
-      finnish_word: { type: "string" },
+      english_word: { type: "string", minLength: 1 },
+      finnish_word: { type: "string", minLength: 1 },
       category_tags: { type: "string" },
     },
     required: ["english_word", "finnish_word"],
@@ -26,8 +26,8 @@ module.exports = {
     type: "object",
     properties: {
       id: { type: "integer" },
-      english_word: { type: "string" },
-      finnish_word: { type: "string" },
+      english_word: { type: "string", minLength: 1 },
+      finnish_word: { type: "string", minLength: 1 },
       category_tags: { type: "string" },
     },
     anyOf: [

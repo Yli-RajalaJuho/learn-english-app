@@ -26,16 +26,6 @@ const InspectWordsPageComponent = () => {
     navigate(path);
   };
 
-  const editWord = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/words/${id}`);
-      const result = await response.json();
-      // patch ->
-    } catch (error) {
-      console.error(`Error editing word with id: ${id}`, error);
-    }
-  };
-
   const deleteWord = async (id) => {
     try {
       const response = await fetch(`http://localhost:8080/api/words/${id}`, {
@@ -112,7 +102,9 @@ const InspectWordsPageComponent = () => {
                   <span>
                     <button
                       className="small-button"
-                      onClick={() => editWord(word.id)}
+                      onClick={() =>
+                        handleButtonClick(`/patch-word/${word.id}`)
+                      }
                     >
                       edit
                     </button>

@@ -4,6 +4,7 @@ import FirstPageComponent from "./pages/FirstPage";
 import SecondPageComponent from "./pages/SecondPage";
 import InspectWordsPageComponent from "./pages/InspectWordsPage";
 import AddWordsPageComponent from "./pages/AddWordsPage";
+import PatchWordPageComponent from "./pages/PatchWordPage";
 import AboutPageComponent from "./pages/AboutPage";
 
 /*
@@ -16,11 +17,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/add-words" element={<AddWordsPageComponent />} />
+        <Route path="/patch-word/:id" element={<PatchWordPageComponent />} />
         <Route path="/" element={<MainPageComponent />} />
         <Route path="/first-page" element={<FirstPageComponent />} />
         <Route path="/second-page" element={<SecondPageComponent />} />
         <Route path="/inspect-words" element={<InspectWordsPageComponent />} />
-        <Route path="/add-words" element={<AddWordsPageComponent />} />
         <Route path="/about" element={<AboutPageComponent />} />
       </Routes>
     </BrowserRouter>

@@ -8,6 +8,7 @@ const AddWordsPageComponent = () => {
     finnish_word: "",
     category_tags: "",
   });
+  const [validInput, setValidInput] = useState(true);
 
   // Transition to different page
   const handleButtonClick = (path) => {
@@ -34,6 +35,7 @@ const AddWordsPageComponent = () => {
 
       if (response.ok) {
         // Clear the form fields after saving
+        setValidInput(true);
         setNewWord({
           english_word: "",
           finnish_word: "",
@@ -41,6 +43,7 @@ const AddWordsPageComponent = () => {
         });
         navigate("/inspect-words");
       } else {
+        setValidInput(false);
         console.error("Failed to save word:", response.statusText);
       }
     } catch (error) {
@@ -51,6 +54,13 @@ const AddWordsPageComponent = () => {
     <>
       <div className="add-words-page">
         <h1>Add New Word</h1>
+        {validInput === false ? (
+          <p className="error-msg">
+            English and Finnish words cannot be empty!
+          </p>
+        ) : (
+          ""
+        )}
         <form>
           <label>
             English Word:{" "}

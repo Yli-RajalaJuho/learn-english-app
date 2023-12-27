@@ -57,6 +57,15 @@
   line-height: 1;
 }
 
+.error-msg {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background-color: #1a1a1a;
+  color: rgb(255, 44, 44);
+  font-weight: bold;
+}
+
 .deletion-warning {
   color: rgb(255, 44, 44);
 }
