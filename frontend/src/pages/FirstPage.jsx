@@ -8,7 +8,7 @@ const FirstPageComponent = () => {
   const [lang, setLang] = useState("fin");
 
   const handleButtonClick = () => {
-    navigate(`/test-page/${wordsNum}`);
+    navigate(`/test-page/${wordsNum}/${lang}`);
   };
 
   const handleInputChange = (event) => {

@@ -84,6 +84,12 @@
   color: #ffffff;
 }
 
+.question-word {
+  padding: 10px;
+  margin-left: 10px;
+  color: #ffffff;
+}
+
 .simple-text {
   display: flex;
   justify-content: center;

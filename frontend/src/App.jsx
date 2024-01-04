@@ -23,7 +23,10 @@ function App() {
         <Route path="/" element={<MainPageComponent />} />
         <Route path="/first-page" element={<FirstPageComponent />} />
         <Route path="/second-page" element={<SecondPageComponent />} />
-        <Route path="/test-page/:wordsNum" element={<TestPageComponent />} />
+        <Route
+          path="/test-page/:wordsNum/:lang"
+          element={<TestPageComponent />}
+        />
         <Route path="/inspect-words" element={<InspectWordsPageComponent />} />
         <Route path="/about" element={<AboutPageComponent />} />
       </Routes>
