@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPageComponent from "./pages/MainPage";
 import FirstPageComponent from "./pages/FirstPage";
 import SecondPageComponent from "./pages/SecondPage";
+import TestPageComponent from "./pages/TestPage";
 import InspectWordsPageComponent from "./pages/InspectWordsPage";
 import AddWordsPageComponent from "./pages/AddWordsPage";
 import PatchWordPageComponent from "./pages/PatchWordPage";
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<MainPageComponent />} />
         <Route path="/first-page" element={<FirstPageComponent />} />
         <Route path="/second-page" element={<SecondPageComponent />} />
+        <Route path="/test-page/:wordsNum" element={<TestPageComponent />} />
         <Route path="/inspect-words" element={<InspectWordsPageComponent />} />
         <Route path="/about" element={<AboutPageComponent />} />
       </Routes>

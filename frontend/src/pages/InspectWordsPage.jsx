@@ -68,6 +68,10 @@ const InspectWordsPageComponent = () => {
           Add new Word
         </button>
 
+        <button onClick={() => handleButtonClick("/")}>
+          back to Main Page
+        </button>
+
         <ul className="basic-list">
           {words.map((word) => (
             <li key={word.id} className="list-item">
