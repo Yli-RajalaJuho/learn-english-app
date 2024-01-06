@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPageComponent from "./pages/MainPage";
 import FirstPageComponent from "./pages/FirstPage";
-import SecondPageComponent from "./pages/SecondPage";
+import ResultsPageComponent from "./pages/ResultsPage";
 import TestPageComponent from "./pages/TestPage";
 import InspectWordsPageComponent from "./pages/InspectWordsPage";
 import AddWordsPageComponent from "./pages/AddWordsPage";
@@ -22,7 +22,7 @@ function App() {
         <Route path="/patch-word/:id" element={<PatchWordPageComponent />} />
         <Route path="/" element={<MainPageComponent />} />
         <Route path="/first-page" element={<FirstPageComponent />} />
-        <Route path="/second-page" element={<SecondPageComponent />} />
+        <Route path="/results-page" element={<ResultsPageComponent />} />
         <Route
           path="/test-page/:wordsNum/:lang"
           element={<TestPageComponent />}

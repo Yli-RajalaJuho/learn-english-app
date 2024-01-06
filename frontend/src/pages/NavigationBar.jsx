@@ -14,9 +14,6 @@ const NavigationBar = () => {
       <button onClick={() => handleButtonClick("/first-page")}>
         First Page
       </button>
-      <button onClick={() => handleButtonClick("/second-page")}>
-        Second Page
-      </button>
       <button onClick={() => handleButtonClick("/about")}>About</button>
     </nav>
   );

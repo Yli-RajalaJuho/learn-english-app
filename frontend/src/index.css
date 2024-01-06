@@ -90,6 +90,20 @@
   color: #ffffff;
 }
 
+.correct {
+  color: #7c85ff;
+}
+
+.incorrect {
+  color: rgb(150, 59, 59);
+}
+
+.user-answer {
+  padding: 10px;
+  margin-left: 10px;
+  color: #ffffff;
+}
+
 .simple-text {
   display: flex;
   justify-content: center;

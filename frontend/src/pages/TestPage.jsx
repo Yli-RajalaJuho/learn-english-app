@@ -8,30 +8,31 @@ const TestPageComponent = () => {
   const { lang } = useParams();
   const [words, setWords] = useState([]);
   const [randomWords, setRandomWords] = useState([]);
-  const [userInputs, setUserInputs] = useState([]);
+  const [userInputs, setUserInputs] = useState(
+    Array.from({ length: wordsNum }, () => "")
+  );
 
-  const handleButtonClick = (path) => {
-    const correctAnswers = randomWords.map((word) =>
-      lang === "fin" ? word.english_word : word.finnish_word
-    );
-
+  const handleButtonClick = () => {
     const userResponses = userInputs.map((input, index) => {
       const correctAnswer =
         lang === "fin"
           ? randomWords[index].english_word
           : randomWords[index].finnish_word;
+      const question =
+        lang === "fin"
+          ? randomWords[index].finnish_word
+          : randomWords[index].english_word;
       return {
+        question: question,
+        correctAnswer: correctAnswer,
         userAnswer: input,
         isCorrect:
           input.trim().toLowerCase() === correctAnswer.trim().toLowerCase(),
       };
     });
 
-    // store answers...
-    console.log("Right Answers:", correctAnswers);
-    console.log("User Responses:", userResponses);
-
-    navigate(path);
+    // Navigate to the next page with the results
+    navigate(`/results-page`, { state: { userResponses } });
   };
 
   const handleInputChange = (index, event) => {
@@ -62,7 +63,6 @@ const TestPageComponent = () => {
       const shuffledWords = [...words].sort(() => 0.5 - Math.random());
       const selectedWords = shuffledWords.slice(0, wordsNum);
       setRandomWords(selectedWords);
-      setUserInputs(new Array(wordsNum).fill(""));
     };
 
     getRandomWords();

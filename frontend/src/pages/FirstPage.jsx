@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavigationBar from "./NavigationBar";
 import { useNavigate } from "react-router-dom";
 
@@ -6,6 +6,7 @@ const FirstPageComponent = () => {
   const navigate = useNavigate();
   const [wordsNum, setWordsNum] = useState(5);
   const [lang, setLang] = useState("fin");
+  const [words, setWords] = useState([]);
 
   const handleButtonClick = () => {
     navigate(`/test-page/${wordsNum}/${lang}`);
@@ -24,6 +25,20 @@ const FirstPageComponent = () => {
     setLang("eng");
   };
 
+  const fetchWords = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/words/");
+      const result = await response.json();
+      setWords(result);
+    } catch (error) {
+      console.error("Error fetching words:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWords();
+  }, []);
+
   return (
     <>
       <NavigationBar />
@@ -31,7 +46,13 @@ const FirstPageComponent = () => {
       <div className="test-init-form">
         <label>
           Number of Words on the Test{" "}
-          <input type="number" value={wordsNum} onChange={handleInputChange} />
+          <input
+            type="number"
+            value={wordsNum}
+            onChange={handleInputChange}
+            min="1"
+            max={words.length}
+          />
         </label>
         <div className="test-lang">
           <p>See Words in Finnish or English</p>
