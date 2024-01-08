@@ -4,8 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const TestPageComponent = () => {
   const navigate = useNavigate();
-  const { wordsNum } = useParams();
-  const { lang } = useParams();
+  const { wordsNum, lang, tags } = useParams();
   const [words, setWords] = useState([]);
   const [randomWords, setRandomWords] = useState([]);
   const [userInputs, setUserInputs] = useState(
@@ -48,7 +47,17 @@ const TestPageComponent = () => {
     try {
       const response = await fetch("http://localhost:8080/api/words/");
       const result = await response.json();
-      setWords(result);
+
+      // Check if tags include "all" and include all words
+      const filteredWords = tags.includes("all")
+        ? result
+        : result.filter((word) =>
+            word.category_tags
+              .split(",")
+              .some((tag) => tags.includes(tag.trim()))
+          );
+
+      setWords(filteredWords);
     } catch (error) {
       console.error("Error fetching words:", error);
     }
@@ -56,7 +65,7 @@ const TestPageComponent = () => {
 
   useEffect(() => {
     fetchWords();
-  }, []);
+  }, [tags]);
 
   useEffect(() => {
     const getRandomWords = () => {
@@ -105,9 +114,7 @@ const TestPageComponent = () => {
           </li>
         ))}
       </ul>
-      <button onClick={() => handleButtonClick("/second-page")}>
-        Submit Answers
-      </button>
+      <button onClick={() => handleButtonClick()}>Submit Answers</button>
     </>
   );
 };

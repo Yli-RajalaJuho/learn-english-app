@@ -27,3 +27,18 @@ patch http://localhost:8080/api/words/3
 content-type: application/json
 
 { "category_tags": "countries"}
+
+###
+get http://localhost:8080/api/scores/
+
+###
+get http://localhost:8080/api/scores/1
+
+######
+delete http://localhost:8080/api/scores/1
+
+###
+post http://localhost:8080/api/scores/
+content-type: application/json
+
+{ "score": "2/4", "correct_words": "coffee, France", "incorrect_words": "tea, Spain"}

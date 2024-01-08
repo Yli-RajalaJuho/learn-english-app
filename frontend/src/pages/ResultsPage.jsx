@@ -1,13 +1,64 @@
 import NavigationBar from "./NavigationBar";
 import { useLocation } from "react-router-dom";
-//import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const ResultsPageComponent = () => {
   const location = useLocation();
   const { userResponses } = location.state || {};
+  const [newScore, setNewScore] = useState({
+    score: "",
+    correct_words: "",
+    incorrect_words: "",
+  });
 
-  // Access the userResponses array, which contains user answers and correctness
-  console.log(userResponses);
+  useEffect(() => {
+    // Calculate score, correct words, and incorrect words
+    const correctAnswers = userResponses.filter(
+      (response) => response.isCorrect
+    );
+    const incorrectAnswers = userResponses.filter(
+      (response) => !response.isCorrect
+    );
+
+    const score = `${correctAnswers.length}/${userResponses.length}`;
+    const correctWords = correctAnswers
+      .map((response) => response.question)
+      .join(",");
+    const incorrectWords = incorrectAnswers
+      .map((response) => response.question)
+      .join(",");
+
+    setNewScore({
+      score,
+      correct_words: correctWords,
+      incorrect_words: incorrectWords,
+    });
+  }, [userResponses]);
+
+  useEffect(() => {
+    const handleSave = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/scores/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newScore),
+        });
+
+        if (response.ok) {
+          console.log("Test result saved successfully!");
+        } else {
+          console.error("Failed to save test result:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error saving test result:", error);
+      }
+    };
+
+    // Save the result when newScore changes
+    handleSave();
+  }, [newScore]);
 
   return (
     <>

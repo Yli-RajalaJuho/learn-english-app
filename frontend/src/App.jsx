@@ -24,7 +24,7 @@ function App() {
         <Route path="/first-page" element={<FirstPageComponent />} />
         <Route path="/results-page" element={<ResultsPageComponent />} />
         <Route
-          path="/test-page/:wordsNum/:lang"
+          path="/test-page/:wordsNum/:lang/:tags"
           element={<TestPageComponent />}
         />
         <Route path="/inspect-words" element={<InspectWordsPageComponent />} />

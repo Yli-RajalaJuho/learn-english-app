@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 require("dotenv").config({ path: "../.env" });
 const wordsRouter = require("./routes/words");
+const scoresRouter = require("./routes/scores");
 const connections = require("./database/connectionsDB");
 
 const port = 8080;
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/words", wordsRouter);
+app.use("/api/scores", scoresRouter);
 
 let server = undefined;
 

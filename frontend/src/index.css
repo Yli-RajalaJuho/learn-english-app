@@ -39,6 +39,14 @@
   align-items: center;
 }
 
+.test-words-number {
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .start-test {
   margin-bottom: auto;
   margin: 10px;
@@ -98,10 +106,41 @@
   color: rgb(150, 59, 59);
 }
 
+.score-id {
+  margin-left: 10px;
+  color: #7c85ff;
+}
+
+.score {
+  margin-left: 10px;
+}
+
+.correct-words {
+  margin-left: 10px;
+}
+
+.incorrect-words {
+  margin-left: 10px;
+}
+
 .user-answer {
-  padding: 10px;
+  padding: 5px;
   margin-left: 10px;
   color: #ffffff;
+}
+
+.select-tags {
+  padding: 10px;
+  background-color: #1a1a1a;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.selected-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .simple-text {
