@@ -104,19 +104,9 @@ const FirstPageComponent = () => {
       <NavigationBar />
       <h1>First Page</h1>
       <div className="test-init-form">
-        <p>Number of words with these tags :{possibleWordsCount}</p>
-        <label className="test-words-number">
-          Number of Words on the Test :
-          <input
-            type="number"
-            value={wordsNum}
-            onChange={handleInputChange}
-            min="1"
-            max={possibleWordsCount || words.length}
-          />
-        </label>
         <div className="select-tags">
           <p>What type of words should be on the test based on tags</p>
+          <p>Number of words available with these tags :{possibleWordsCount}</p>
           <div className="selected-buttons">
             {tags.map((tag) => (
               <button
@@ -129,6 +119,16 @@ const FirstPageComponent = () => {
             ))}
           </div>
         </div>
+        <label className="test-words-number">
+          Number of Words on the Test :
+          <input
+            type="number"
+            value={wordsNum}
+            onChange={handleInputChange}
+            min="1"
+            max={possibleWordsCount || words.length}
+          />
+        </label>
         <div className="test-lang">
           <p>See Words in Finnish or English</p>
           <div className="selected-buttons">

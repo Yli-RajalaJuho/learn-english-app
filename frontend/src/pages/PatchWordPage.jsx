@@ -8,6 +8,13 @@ const PatchWordPageComponent = () => {
   const [displayWords, setDisplayWords] = useState([]);
   const [validInput, setValidInput] = useState(true);
 
+  const [words, setWords] = useState([]);
+  const [patchWordTags, setPatchWordTags] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [newTags, setNewTags] = useState([]);
+  const [newTagInput, setNewTagInput] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+
   const handleButtonClick = (path) => {
     navigate(path);
   };
@@ -36,18 +43,38 @@ const PatchWordPageComponent = () => {
     }
   };
 
+  const fetchPatchTags = () => {
+    const uniqueTags = Array.from(
+      new Set(
+        patchWords.flatMap((word) =>
+          word.category_tags.split(",").map((tag) => tag.trim())
+        )
+      )
+    );
+    setPatchWordTags(uniqueTags);
+  };
+
   useEffect(() => {
     fetchWordData();
   }, [id]);
 
+  useEffect(() => {
+    fetchPatchTags();
+    setSelectedTags(patchWordTags);
+  }, [patchWords]);
+
   const handleSaveButtonClick = async () => {
     try {
+      patchWords[0].category_tags = "";
       const response = await fetch(`http://localhost:8080/api/words/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(patchWords[0]),
+        body: JSON.stringify({
+          ...patchWords[0],
+          category_tags: selectedTags.join(", "),
+        }),
       });
 
       if (response.ok) {
@@ -62,6 +89,73 @@ const PatchWordPageComponent = () => {
       console.error("Error saving word:", error);
     }
   };
+
+  // FOR TAGS
+  const fetchWords = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/words/");
+      const result = await response.json();
+      setWords(result);
+    } catch (error) {
+      console.error("Error fetching words:", error);
+    }
+  };
+
+  const fetchTags = () => {
+    const uniqueOldTags = Array.from(
+      new Set(
+        words.flatMap((word) =>
+          word.category_tags.split(",").map((tag) => tag.trim())
+        )
+      )
+    );
+    const allTags = [...uniqueOldTags, ...newTags];
+    setTags(allTags);
+  };
+
+  useEffect(() => {
+    fetchWords();
+  }, [selectedTags]);
+
+  useEffect(() => {
+    fetchTags();
+  }, [words, newTags]);
+
+  const toggleTag = (tag) => {
+    setSelectedTags((prevTags) =>
+      prevTags.includes(tag)
+        ? prevTags.filter((selectedTag) => selectedTag !== tag)
+        : [...prevTags, tag]
+    );
+  };
+
+  const handleAddTagClick = () => {
+    const newTag = newTagInput.trim();
+    if (newTag) {
+      if (!tags.includes(newTag)) {
+        // Add the new tag to both tags and newTags arrays
+        setTags((prevTags) => [...prevTags, newTag]);
+        setNewTags((prevNewTags) => [...prevNewTags, newTag]);
+
+        // Add the new tag to the selected tags array
+        setSelectedTags((prevTags) => [...prevTags, newTag]);
+
+        // Clear the input field
+        setNewTagInput("");
+      } else {
+        // Handle case where the tag already exists
+        setSelectedTags((prevTags) =>
+          prevTags.includes(newTag) ? prevTags : [...prevTags, newTag]
+        );
+
+        // Clear the input field
+        setNewTagInput("");
+      }
+    }
+  };
+
+  console.log(patchWords[0]);
+  console.log(selectedTags);
 
   return (
     <div className="add-words-page">
@@ -79,46 +173,79 @@ const PatchWordPageComponent = () => {
         ))}
       </ul>
       {!validInput && (
-        <p className="error-msg">English and Finnish words cannot be empty!</p>
+        <p className="error-msg">
+          Tags, English and Finnish words cannot be empty!
+        </p>
       )}
       {patchWords.length !== 0 && (
-        <form>
-          <label>
-            English Word:{" "}
-            <input
-              type="text"
-              name="english_word"
-              value={patchWords[0].english_word}
-              onChange={handleInputChange}
-            />
-          </label>
-          <label>
-            Finnish Word:{" "}
-            <input
-              type="text"
-              name="finnish_word"
-              value={patchWords[0].finnish_word}
-              onChange={handleInputChange}
-            />
-          </label>
-          <label>
-            Category Tags:{" "}
-            <input
-              type="text"
-              name="category_tags"
-              value={patchWords[0].category_tags}
-              onChange={handleInputChange}
-            />
-          </label>
-          <div className="center">
-            <button type="button" onClick={handleSaveButtonClick}>
+        <>
+          <div className="select-tags">
+            <form className="tags-form">
+              <label className="label-margin">
+                English Word{": "}
+                <input
+                  type="text"
+                  name="english_word"
+                  value={patchWords[0].english_word}
+                  onChange={handleInputChange}
+                />
+              </label>
+              <label className="label-margin">
+                Finnish Word{": "}
+                <input
+                  type="text"
+                  name="finnish_word"
+                  value={patchWords[0].finnish_word}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </form>
+          </div>
+          <div className="select-tags">
+            <form className="tags-form">
+              <label className="label-margin">
+                Create new Tags{": "}
+                <input
+                  type="text"
+                  name="category_tags"
+                  value={newTagInput}
+                  onChange={(e) => setNewTagInput(e.target.value)}
+                />
+              </label>
+              <button type="button" onClick={handleAddTagClick}>
+                Add Tag
+              </button>
+            </form>
+            <div className="selected-buttons">
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => toggleTag(tag)}
+                  className={
+                    selectedTags.includes(tag) ? "selected-button" : ""
+                  }
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="confirm-cancel">
+            <button
+              className="start-test"
+              type="button"
+              onClick={handleSaveButtonClick}
+            >
               Confirm
             </button>
-            <button onClick={() => handleButtonClick("/inspect-words")}>
+            <button
+              className="cancel-button"
+              onClick={() => handleButtonClick("/inspect-words")}
+            >
               Cancel
             </button>
           </div>
-        </form>
+        </>
       )}
     </div>
   );

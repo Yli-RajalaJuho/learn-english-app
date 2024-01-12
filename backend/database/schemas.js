@@ -4,9 +4,9 @@ module.exports = {
     properties: {
       english_word: { type: "string", minLength: 1 },
       finnish_word: { type: "string", minLength: 1 },
-      category_tags: { type: "string" },
+      category_tags: { type: "string", minLength: 1 },
     },
-    required: ["english_word", "finnish_word"],
+    required: ["english_word", "finnish_word", "category_tags"],
     additionalProperties: false,
   },
 
@@ -16,9 +16,9 @@ module.exports = {
       id: { type: "integer" },
       english_word: { type: "string", minLength: 1 },
       finnish_word: { type: "string", minLength: 1 },
-      category_tags: { type: "string" },
+      category_tags: { type: "string", minLength: 1 },
     },
-    required: ["english_word", "finnish_word"],
+    required: ["english_word", "finnish_word", "category_tags"],
     additionalProperties: false,
   },
 
@@ -28,7 +28,7 @@ module.exports = {
       id: { type: "integer" },
       english_word: { type: "string", minLength: 1 },
       finnish_word: { type: "string", minLength: 1 },
-      category_tags: { type: "string" },
+      category_tags: { type: "string", minLength: 1 },
     },
     anyOf: [
       { required: ["english_word"] },

@@ -61,8 +61,49 @@
   transition: border-color 0.25s;
 }
 
+.cancel-button {
+  margin-bottom: auto;
+  margin: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1.4em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
 .selected-button {
   background-color: #7c85ff;
+}
+
+.create-eng-fin-words {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.confirm-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.tags-form {
+  top: 0;
+  margin-bottom: auto;
+  margin: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label-margin {
+  margin: 10px;
 }
 
 .basic-list {
@@ -139,6 +180,9 @@
 
 .selected-buttons {
   display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  padding: 10px;
   justify-content: center;
   align-items: center;
 }
@@ -255,6 +299,7 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/*
 form {
   top: 0;
   padding: 20px;
@@ -263,6 +308,7 @@ form {
   justify-content: center;
   align-items: center;
 }
+*/
 
 @media (prefers-color-scheme: light) {
   :root {
