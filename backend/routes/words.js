@@ -103,6 +103,50 @@ wordsRouter.get("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
+// SEARCH ->
+wordsRouter.get("/search", async (req, res) => {
+  let connection = undefined;
+  try {
+    // Get the search term from query parameters
+    const searchTerm = req.query.searchTerm;
+
+    // Check if there are sort query parameters
+    const sortable = req.query.sortable;
+    const sortOrder = req.query.sortOrder;
+
+    // Connect to the database
+    connection = await connections.connect();
+
+    // Search for the term
+    const searchResults = await database.search(
+      connection,
+      searchTerm,
+      sortable,
+      sortOrder
+    );
+
+    // Result
+    res.json(searchResults);
+  } catch (error) {
+    // Handle any errors that occur during connection, query, or response
+    // Handle any errors that occur during connection, query, or response
+    if (error.code === 404) {
+      // If not found show what id wasn't found
+      res.status(error.code).send(error.message);
+    } else {
+      res.sendStatus(error);
+    }
+  } finally {
+    try {
+      // Close the database connection
+      connections.close(connection);
+    } catch (err) {
+      // Handle any errors that occur while closing the connection
+      res.sendStatus(500);
+    }
+  }
+});
+
 // DELETE ALL ->
 wordsRouter.delete("/", async (req, res) => {
   let connection = undefined;

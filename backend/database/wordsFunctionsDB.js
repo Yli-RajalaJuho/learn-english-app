@@ -136,6 +136,80 @@ module.exports = {
     });
   },
 
+  search: (connection, searchTerm, sortable, sortOrder) => {
+    return new Promise((resolve, reject) => {
+      try {
+        // Initialize the sql query
+        let query = `
+        SELECT * FROM Words
+        WHERE english_word LIKE ? OR finnish_word LIKE ? OR category_tags LIKE ?
+      `;
+        const values = [
+          `%${searchTerm}%`,
+          `%${searchTerm}%`,
+          `%${searchTerm}%`,
+        ];
+
+        let sanitizedSortable = "english_word";
+        let sanitizedSortOrder = "asc";
+
+        const validSortOrders = ["asc", "desc"];
+        const validSortables = ["id", "eng", "fin", "tags"];
+
+        // Sanitize sortOrder
+        if (sortOrder && validSortOrders.includes(sortOrder.toLowerCase())) {
+          sanitizedSortOrder = sortOrder.toLowerCase();
+        }
+
+        // Sanitize sortable
+        if (sortable && validSortables.includes(sortable.toLowerCase())) {
+          switch (sortable.toLowerCase()) {
+            case "id":
+              sanitizedSortable = "id";
+              break;
+            case "eng":
+              sanitizedSortable = "english_word";
+              break;
+            case "fin":
+              sanitizedSortable = "finnish_word";
+              break;
+            case "tags":
+              sanitizedSortable = "category_tags";
+              break;
+            default:
+              sanitizedSortable = "english_word";
+              break;
+          }
+        }
+
+        query += ` ORDER BY ${sanitizedSortable} ${sanitizedSortOrder}`;
+
+        // Search the database with all the given data
+        connection.query(query, values, (err, result) => {
+          if (err) {
+            // Server Error
+            console.error(err);
+
+            reject(500);
+          } else if (result.length === 0) {
+            // Not Found
+            reject({
+              code: 404,
+              message: `No matching records found for search term: ${searchTerm}`,
+            });
+          } else {
+            // Valid
+            resolve(result);
+          }
+        });
+      } catch (error) {
+        // Server Error
+        console.error(error);
+        reject(500);
+      }
+    });
+  },
+
   deleteById: (connection, id) => {
     return new Promise((resolve, reject) => {
       try {

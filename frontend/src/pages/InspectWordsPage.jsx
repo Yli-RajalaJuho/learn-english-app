@@ -9,6 +9,7 @@ const InspectWordsPageComponent = () => {
   const [confirmedItemId, setConfirmedItemId] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
   const [sortable, setSortable] = useState("eng");
+  const [searchInput, setSearchInput] = useState("");
 
   const handleSortOrder = (order) => {
     setSortOrder(order);
@@ -18,21 +19,28 @@ const InspectWordsPageComponent = () => {
     setSortable(sortBy);
   };
 
+  const handleSearch = (search) => {
+    setSearchInput(search);
+  };
+
   const fetchWords = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/words?sortable=${sortable}&sortOrder=${sortOrder}`
+        `http://localhost:8080/api/words/search?searchTerm=${searchInput}&sortable=${sortable}&sortOrder=${sortOrder}`
       );
       const result = await response.json();
-      setWords(result);
+      if (response.ok) {
+        setWords(result);
+      }
     } catch (error) {
+      setWords([]);
       console.error("Error fetching words:", error);
     }
   };
 
   useEffect(() => {
     fetchWords();
-  }, [sortable, sortOrder]);
+  }, [searchInput, sortable, sortOrder]);
 
   const handleButtonClick = (path) => {
     navigate(path);
@@ -85,7 +93,16 @@ const InspectWordsPageComponent = () => {
         </button>
 
         <div className="sort-container">
-          <div className="searchbar"></div>
+          <label className="label-margin">
+            Search{": "}
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Search..."
+            />
+          </label>
+
           <div className="selected-buttons">
             <p>Sort by:</p>
             <button
