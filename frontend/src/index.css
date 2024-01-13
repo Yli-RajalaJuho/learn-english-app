@@ -17,9 +17,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   top: 0;
   background-color: #1a1a1a;
+}
+
+.sort-container {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-bottom: 10px;
+  background-color: #1a1a1a;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .test-init-form {

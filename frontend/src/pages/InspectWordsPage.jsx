@@ -7,10 +7,22 @@ const InspectWordsPageComponent = () => {
   const [words, setWords] = useState([]);
   const [confirm, setConfirm] = useState(false);
   const [confirmedItemId, setConfirmedItemId] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortable, setSortable] = useState("eng");
+
+  const handleSortOrder = (order) => {
+    setSortOrder(order);
+  };
+
+  const handleSortable = (sortBy) => {
+    setSortable(sortBy);
+  };
 
   const fetchWords = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/words/");
+      const response = await fetch(
+        `http://localhost:8080/api/words?sortable=${sortable}&sortOrder=${sortOrder}`
+      );
       const result = await response.json();
       setWords(result);
     } catch (error) {
@@ -20,7 +32,7 @@ const InspectWordsPageComponent = () => {
 
   useEffect(() => {
     fetchWords();
-  }, []);
+  }, [sortable, sortOrder]);
 
   const handleButtonClick = (path) => {
     navigate(path);
@@ -71,6 +83,52 @@ const InspectWordsPageComponent = () => {
         <button onClick={() => handleButtonClick("/")}>
           back to Main Page
         </button>
+
+        <div className="sort-container">
+          <div className="searchbar"></div>
+          <div className="selected-buttons">
+            <p>Sort by:</p>
+            <button
+              onClick={() => handleSortable("id")}
+              className={sortable === "id" ? "selected-button" : ""}
+            >
+              Id
+            </button>
+            <button
+              onClick={() => handleSortable("eng")}
+              className={sortable === "eng" ? "selected-button" : ""}
+            >
+              Eng
+            </button>
+            <button
+              onClick={() => handleSortable("fin")}
+              className={sortable === "fin" ? "selected-button" : ""}
+            >
+              Fin
+            </button>
+            <button
+              onClick={() => handleSortable("tags")}
+              className={sortable === "tags" ? "selected-button" : ""}
+            >
+              Tags
+            </button>
+          </div>
+          <div className="selected-buttons">
+            <p>Sort order:</p>
+            <button
+              onClick={() => handleSortOrder("asc")}
+              className={sortOrder === "asc" ? "selected-button" : ""}
+            >
+              asc
+            </button>
+            <button
+              onClick={() => handleSortOrder("desc")}
+              className={sortOrder === "desc" ? "selected-button" : ""}
+            >
+              desc
+            </button>
+          </div>
+        </div>
 
         <ul className="basic-list">
           {words.map((word) => (
