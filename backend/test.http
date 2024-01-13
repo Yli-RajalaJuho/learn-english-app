@@ -5,6 +5,9 @@ get http://localhost:8080/
 get http://localhost:8080/api/words/
 
 ###
+get http://localhost:8080/api/words?sortable=eng&sortOrder=asc
+
+###
 get http://localhost:8080/api/words/1
 
 ###

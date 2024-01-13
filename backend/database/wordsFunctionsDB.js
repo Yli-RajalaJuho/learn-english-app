@@ -40,25 +40,59 @@ module.exports = {
     });
   },
 
-  findAll: (connection) => {
+  findAll: (connection, sortable, sortOrder) => {
     return new Promise((resolve, reject) => {
       try {
-        connection.query("SELECT * FROM Words", (err, words) => {
+        let query = "SELECT * FROM Words";
+        let sanitizedSortable = "english_word";
+        let sanitizedSortOrder = "asc";
+
+        const validSortOrders = ["asc", "desc"];
+        const validSortables = ["id", "eng", "fin", "tags"];
+
+        // Sanitize sortOrder
+        if (sortOrder && validSortOrders.includes(sortOrder.toLowerCase())) {
+          sanitizedSortOrder = sortOrder.toLowerCase();
+        }
+
+        // Sanitize sortable
+        if (sortable && validSortables.includes(sortable.toLowerCase())) {
+          switch (sortable.toLowerCase()) {
+            case "id":
+              sanitizedSortable = "id";
+              break;
+            case "eng":
+              sanitizedSortable = "english_word";
+              break;
+            case "fin":
+              sanitizedSortable = "finnish_word";
+              break;
+            case "tags":
+              sanitizedSortable = "category_tags";
+              break;
+            default:
+              sanitizedSortable = "english_word";
+              break;
+          }
+        }
+
+        query += ` ORDER BY ${sanitizedSortable} ${sanitizedSortOrder}`;
+
+        // Find all the data based on sort query if there is one
+        connection.query(query, (err, words) => {
           if (err) {
             // Server Error
             console.error(err);
             reject(500);
           } else {
-            const results = words.map((data) => {
-              return {
-                id: data.id,
-                english_word: data.english_word,
-                finnish_word: data.finnish_word,
-                category_tags: data.category_tags,
-              };
-            });
+            // Return results
+            const results = words.map((data) => ({
+              id: data.id,
+              english_word: data.english_word,
+              finnish_word: data.finnish_word,
+              category_tags: data.category_tags,
+            }));
 
-            // Valid
             resolve(results);
           }
         });

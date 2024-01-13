@@ -34,15 +34,19 @@ wordsRouter.post("/", async (req, res) => {
   }
 });
 
-// FIND ALL
+// FIND ALL with SORT
 wordsRouter.get("/", async (req, res) => {
   let connection = undefined;
   try {
     // Connect to the database
     connection = await connections.connect();
 
-    // Search for the results
-    const words = await database.findAll(connection);
+    // Check if there are sort query parameters
+    const sortable = req.query.sortable;
+    const sortOrder = req.query.sortOrder;
+
+    // Search for the results with optional sorting
+    const words = await database.findAll(connection, sortable, sortOrder);
 
     // Result
     res.json(words);
