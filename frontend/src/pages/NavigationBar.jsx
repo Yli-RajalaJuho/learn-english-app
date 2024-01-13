@@ -12,6 +12,9 @@ const NavigationBar = () => {
     <nav className="main-navbar">
       <button onClick={() => handleButtonClick("/")}>Main Page</button>
       <button onClick={() => handleButtonClick("/about")}>About</button>
+      <button onClick={() => handleButtonClick("/first-page")}>
+        Start Learning
+      </button>
     </nav>
   );
 };

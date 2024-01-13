@@ -16,6 +16,7 @@
 .main-navbar {
   display: flex;
   align-items: center;
+  flex-direction: row;
   justify-content: center;
   top: 0;
   background-color: #1a1a1a;
@@ -31,6 +32,16 @@
   background-color: #1a1a1a;
   border: 1px solid #ccc;
   border-radius: 5px;
+}
+
+.searchbar {
+  padding: 15px;
+}
+
+.left-center {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .test-init-form {
@@ -309,17 +320,6 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-
-/*
-form {
-  top: 0;
-  padding: 20px;
-  background-color: rgb(104, 104, 104);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-*/
 
 @media (prefers-color-scheme: light) {
   :root {

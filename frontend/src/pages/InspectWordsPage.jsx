@@ -83,26 +83,19 @@ const InspectWordsPageComponent = () => {
     <>
       <NavigationBar />
       <div className="inspect-words-page">
-        <h1>Inspect Words</h1>
-        <button onClick={() => handleButtonClick("/add-words")}>
-          Add new Word
-        </button>
+        <h1>Words</h1>
 
-        <button onClick={() => handleButtonClick("/")}>
-          back to Main Page
-        </button>
+        <div className="left-center">
+          <button onClick={() => handleButtonClick("/add-words")}>
+            Add new Word
+          </button>
+
+          <button onClick={() => handleButtonClick("/")}>
+            back to Main Page
+          </button>
+        </div>
 
         <div className="sort-container">
-          <label className="label-margin">
-            Search{": "}
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => handleSearch(e.target.value)}
-              placeholder="Search..."
-            />
-          </label>
-
           <div className="selected-buttons">
             <p>Sort by:</p>
             <button
@@ -145,6 +138,18 @@ const InspectWordsPageComponent = () => {
               desc
             </button>
           </div>
+        </div>
+
+        <div className="searchbar">
+          <label className="label-margin">
+            Search{": "}
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Search..."
+            />
+          </label>
         </div>
 
         <ul className="basic-list">
