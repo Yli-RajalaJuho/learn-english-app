@@ -38,14 +38,20 @@ scoresRouter.post("/", async (req, res) => {
 scoresRouter.get("/", async (req, res) => {
   let connection = undefined;
   try {
+    // Get the search term from query parameters
+    const searchTerm = req.query.searchTerm;
+
+    // Check if there are sort query parameters
+    const sortOrder = req.query.sortOrder;
+
     // Connect to the database
     connection = await connections.connect();
 
     // Search for the results
-    const words = await database.findAll(connection);
+    const scores = await database.findAll(connection, searchTerm, sortOrder);
 
     // Result
-    res.json(words);
+    res.json(scores);
   } catch (error) {
     // Handle any errors that occur during connection, query, or response
     if (error.code === 404) {
@@ -76,10 +82,10 @@ scoresRouter.get("/:myId([0-9]+)", async (req, res) => {
     connection = await connections.connect();
 
     // Search for the id
-    const word = await database.findById(connection, id);
+    const score = await database.findById(connection, id);
 
     // Result
-    res.json(word);
+    res.json(score);
   } catch (error) {
     // Handle any errors that occur during connection, query, or response
     if (error.code === 404) {

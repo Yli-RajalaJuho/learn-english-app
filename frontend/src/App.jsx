@@ -3,6 +3,7 @@ import MainPageComponent from "./pages/MainPage";
 import FirstPageComponent from "./pages/FirstPage";
 import ResultsPageComponent from "./pages/ResultsPage";
 import TestPageComponent from "./pages/TestPage";
+import ScoreboardPageComponent from "./pages/ScoreboardPage";
 import InspectWordsPageComponent from "./pages/InspectWordsPage";
 import AddWordsPageComponent from "./pages/AddWordsPage";
 import PatchWordPageComponent from "./pages/PatchWordPage";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<MainPageComponent />} />
         <Route path="/first-page" element={<FirstPageComponent />} />
         <Route path="/results-page" element={<ResultsPageComponent />} />
+        <Route path="/scoreboard-page" element={<ScoreboardPageComponent />} />
         <Route
           path="/test-page/:wordsNum/:lang/:tags"
           element={<TestPageComponent />}

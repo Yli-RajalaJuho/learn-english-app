@@ -77,6 +77,8 @@ const TestPageComponent = () => {
     getRandomWords();
   }, [words, wordsNum]);
 
+  console.log(wordsNum);
+
   return (
     <>
       <NavigationBar />

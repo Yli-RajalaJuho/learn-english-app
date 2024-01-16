@@ -63,7 +63,8 @@ const ResultsPageComponent = () => {
   return (
     <>
       <NavigationBar />
-      <h1>Results Page</h1>
+      <h1>Results</h1>
+      <h3>Your got {newScore.score} words right!!!</h3>
       <ul>
         {userResponses.map((response, index) => (
           <li key={index}>

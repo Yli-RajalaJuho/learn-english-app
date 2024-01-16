@@ -11,33 +11,28 @@ const FirstPageComponent = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [possibleWordsCount, setPossibleWordsCount] = useState(5);
 
+  const [validWordsNum, setValidWordsNum] = useState(true);
+
   const handleButtonClick = () => {
-    let effectiveWordsNum = wordsNum;
-    if (possibleWordsCount < wordsNum && possibleWordsCount !== "") {
-      effectiveWordsNum = possibleWordsCount;
+    if (validWordsNum === true) {
+      const tagsParam =
+        selectedTags.length > 0 ? selectedTags.join(",") : "all";
+      navigate(`/test-page/${wordsNum}/${lang}/${tagsParam}`);
     }
-    const tagsParam = selectedTags.length > 0 ? selectedTags.join(",") : "all";
-    navigate(`/test-page/${effectiveWordsNum}/${lang}/${tagsParam}`);
   };
 
   useEffect(() => {
-    // Update wordsNum if it's greater than possibleWordsCount
-    if (wordsNum > possibleWordsCount && possibleWordsCount !== "") {
-      setWordsNum(possibleWordsCount);
+    if (wordsNum > possibleWordsCount || wordsNum <= 0) {
+      setValidWordsNum(false);
+    } else {
+      setValidWordsNum(true);
     }
-  }, [possibleWordsCount]);
+  }, [wordsNum]);
 
   const handleInputChange = (event) => {
     const { value } = event.target;
 
-    if (!value.trim() || isNaN(value)) {
-      // If the input is empty or not a number, set it to 1
-      setWordsNum(1);
-    } else {
-      // Ensure positive integer and not less than 1
-      const newValue = Math.max(1, Math.floor(Number(value)));
-      setWordsNum(newValue);
-    }
+    setWordsNum(value);
   };
 
   const handleLangFin = () => {
@@ -95,7 +90,7 @@ const FirstPageComponent = () => {
     if (selectedTags.length !== 0) {
       setPossibleWordsCount(filteredWords.length);
     } else {
-      setPossibleWordsCount("");
+      setPossibleWordsCount(words.length);
     }
   }, [selectedTags, words]);
 
@@ -103,10 +98,17 @@ const FirstPageComponent = () => {
     <>
       <NavigationBar />
       <h1>First Page</h1>
+      {validWordsNum === false ? (
+        <p className="error-msg">
+          Please set the number of words on the test to higher than 0 and{" "}
+          {possibleWordsCount} at max!
+        </p>
+      ) : null}
       <div className="test-init-form">
         <div className="select-tags">
-          <p>What type of words should be on the test based on tags</p>
-          <p>Number of words available with these tags :{possibleWordsCount}</p>
+          <p className="center">
+            What type of words should be on the test based on tags
+          </p>
           <div className="selected-buttons">
             {tags.map((tag) => (
               <button
@@ -119,31 +121,38 @@ const FirstPageComponent = () => {
             ))}
           </div>
         </div>
-        <label className="test-words-number">
-          Number of Words on the Test :
-          <input
-            type="number"
-            value={wordsNum}
-            onChange={handleInputChange}
-            min="1"
-            max={possibleWordsCount || words.length}
-          />
-        </label>
-        <div className="test-lang">
-          <p>See Words in Finnish or English</p>
-          <div className="selected-buttons">
-            <button
-              onClick={handleLangFin}
-              className={lang === "fin" ? "selected-button" : ""}
-            >
-              FIN
-            </button>
-            <button
-              onClick={handleLangEng}
-              className={lang === "eng" ? "selected-button" : ""}
-            >
-              ENG
-            </button>
+        <div className="select-tags">
+          <div className="test-words">
+            <label className="label-margin">
+              Number of Words on the Test{": "}
+              <input
+                type="number"
+                value={wordsNum}
+                onChange={handleInputChange}
+                min="1"
+                max={possibleWordsCount || words.length}
+              />
+            </label>
+          </div>
+        </div>
+
+        <div className="select-tags">
+          <div className="test-lang">
+            <p>See Test Words in Finnish or English</p>
+            <div className="selected-buttons">
+              <button
+                onClick={handleLangFin}
+                className={lang === "fin" ? "selected-button" : ""}
+              >
+                FIN
+              </button>
+              <button
+                onClick={handleLangEng}
+                className={lang === "eng" ? "selected-button" : ""}
+              >
+                ENG
+              </button>
+            </div>
           </div>
         </div>
 

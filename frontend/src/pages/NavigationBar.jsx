@@ -10,9 +10,15 @@ const NavigationBar = () => {
 
   return (
     <nav className="main-navbar">
-      <button onClick={() => handleButtonClick("/")}>Main Page</button>
+      <button onClick={() => handleButtonClick("/")}>Home</button>
+      <button onClick={() => handleButtonClick("/scoreboard-page")}>
+        Scoreboard
+      </button>
       <button onClick={() => handleButtonClick("/about")}>About</button>
-      <button onClick={() => handleButtonClick("/first-page")}>
+      <button
+        className="selected-button"
+        onClick={() => handleButtonClick("/first-page")}
+      >
         Start Learning
       </button>
     </nav>

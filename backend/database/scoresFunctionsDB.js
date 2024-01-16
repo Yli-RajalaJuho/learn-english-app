@@ -40,26 +40,40 @@ module.exports = {
     });
   },
 
-  findAll: (connection) => {
+  findAll: (connection, searchTerm, sortOrder) => {
     return new Promise((resolve, reject) => {
       try {
-        connection.query("SELECT * FROM Scores", (err, scores) => {
+        // Initialize the sql query
+        let query = `SELECT * FROM Scores WHERE id LIKE ?`;
+
+        const values = `%${searchTerm}%`;
+
+        let sanitizedSortOrder = "desc";
+        const validSortOrders = ["asc", "desc"];
+
+        // Sanitize sortOrder
+        if (sortOrder && validSortOrders.includes(sortOrder.toLowerCase())) {
+          sanitizedSortOrder = sortOrder.toLowerCase();
+        }
+
+        query += ` ORDER BY id ${sanitizedSortOrder}`;
+
+        // Search the database with all the given data
+        connection.query(query, values, (err, result) => {
           if (err) {
             // Server Error
             console.error(err);
-            reject(500);
-          } else {
-            const results = scores.map((data) => {
-              return {
-                id: data.id,
-                score: data.score,
-                correct_words: data.correct_words,
-                incorrect_words: data.incorrect_words,
-              };
-            });
 
+            reject(500);
+          } else if (result.length === 0) {
+            // Not Found
+            reject({
+              code: 404,
+              message: `No matching records found for search term: ${searchTerm}`,
+            });
+          } else {
             // Valid
-            resolve(results);
+            resolve(result);
           }
         });
       } catch (error) {

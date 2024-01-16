@@ -35,7 +35,7 @@ content-type: application/json
 { "category_tags": "countries"}
 
 ###
-get http://localhost:8080/api/scores/
+get http://localhost:8080/api/scores/?searchTerm=&sortOrder=desc
 
 ###
 get http://localhost:8080/api/scores/1

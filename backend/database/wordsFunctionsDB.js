@@ -142,9 +142,10 @@ module.exports = {
         // Initialize the sql query
         let query = `
         SELECT * FROM Words
-        WHERE english_word LIKE ? OR finnish_word LIKE ? OR category_tags LIKE ?
+        WHERE id LIKE ? OR english_word LIKE ? OR finnish_word LIKE ? OR category_tags LIKE ?
       `;
         const values = [
+          `%${searchTerm}%`,
           `%${searchTerm}%`,
           `%${searchTerm}%`,
           `%${searchTerm}%`,
