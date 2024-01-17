@@ -91,6 +91,19 @@ const MainPageComponent = () => {
     setConfirm(false);
   };
 
+  const handleScoreColor = (score) => {
+    const [numerator, denominator] = score.split("/");
+    const numericScore = parseFloat(numerator) / parseFloat(denominator);
+
+    if (numericScore < 0.25) {
+      return "score-color-bad";
+    } else if (numericScore >= 0.25 && numericScore < 1) {
+      return "score-color-mediocre";
+    } else if (numericScore == 1) {
+      return "score-color-great";
+    }
+  };
+
   return (
     <>
       <NavigationBar />
@@ -122,41 +135,46 @@ const MainPageComponent = () => {
 
       <div className="sort-container">
         <div className="selected-buttons">
-          <div className="searchbar">
-            <label className="label-margin">
-              Search{": "}
-              <input
-                type="number"
-                value={searchInput}
-                onChange={(e) => handleSearch(e.target.value)}
-                placeholder="Search..."
-              />
-            </label>
+          <div className="data-vertical-right">
+            <div className="searchbar">
+              <label className="label-margin">
+                Search{": "}
+                <input
+                  type="number"
+                  value={searchInput}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Search..."
+                />
+              </label>
+            </div>
           </div>
-          <button
-            onClick={() => handleSortOrder("asc")}
-            className={
-              sortOrder === "asc" ? "selected-img-button" : "img-button"
-            }
-          >
-            <img
-              className="button-image"
-              src={DownArrow}
-              alt="ascending-order"
-            ></img>
-          </button>
-          <button
-            onClick={() => handleSortOrder("desc")}
-            className={
-              sortOrder === "desc" ? "selected-img-button" : "img-button"
-            }
-          >
-            <img
-              className="button-image"
-              src={upArrow}
-              alt="descending-order"
-            ></img>
-          </button>
+
+          <div className="data-vertical-right">
+            <button
+              onClick={() => handleSortOrder("asc")}
+              className={
+                sortOrder === "asc" ? "selected-img-button" : "img-button"
+              }
+            >
+              <img
+                className="button-image"
+                src={DownArrow}
+                alt="ascending-order"
+              ></img>
+            </button>
+            <button
+              onClick={() => handleSortOrder("desc")}
+              className={
+                sortOrder === "desc" ? "selected-img-button" : "img-button"
+              }
+            >
+              <img
+                className="button-image"
+                src={upArrow}
+                alt="descending-order"
+              ></img>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -176,6 +194,12 @@ const MainPageComponent = () => {
           <ul className="basic-list">
             {scores.map((score) => (
               <li className="list-item" key={score.id}>
+                <div className={handleScoreColor(score.score)}>
+                  <label className="label-margin">
+                    Score:
+                    <span className="score">{score.score}</span>
+                  </label>
+                </div>
                 <div className="data-vertical">
                   <div className="data-vertical-left">
                     <label className="label-margin">
@@ -183,9 +207,6 @@ const MainPageComponent = () => {
                     </label>
                     <label className="label-margin">
                       <span className="score-date">Date: {score.date}</span>
-                    </label>
-                    <label className="label-margin">
-                      <span className="score">Score: {score.score}</span>
                     </label>
                   </div>
 

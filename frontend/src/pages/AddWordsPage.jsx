@@ -132,40 +132,48 @@ const AddWordsPageComponent = () => {
             Tags, English and Finnish words cannot be empty!
           </p>
         ) : null}
+
         <div className="select-tags">
           <form className="tags-form">
-            <label className="label-margin">
-              New English Word:{" "}
-              <input
-                type="text"
-                name="english_word"
-                value={newWord.english_word}
-                onChange={handleInputChange}
-              />
-            </label>
-            <label className="label-margin">
-              New Finnish Word:{" "}
-              <input
-                type="text"
-                name="finnish_word"
-                value={newWord.finnish_word}
-                onChange={handleInputChange}
-              />
-            </label>
+            <div className="data-vertical-right">
+              <label className="label-margin">
+                New English Word:{" "}
+                <input
+                  type="text"
+                  name="english_word"
+                  value={newWord.english_word}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </div>
+            <div className="data-vertical-right">
+              <label className="label-margin">
+                New Finnish Word:{" "}
+                <input
+                  type="text"
+                  name="finnish_word"
+                  value={newWord.finnish_word}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </div>
           </form>
         </div>
+
         <h2>Add Tags</h2>
         <div className="select-tags">
           <form className="tags-form">
-            <label className="label-margin">
-              Create a new tag:{" "}
-              <input
-                type="text"
-                name="category_tags"
-                value={newWord.category_tags}
-                onChange={handleInputChange}
-              />
-            </label>
+            <div className="data-vertical-right">
+              <label className="label-margin">
+                Create a new tag:{" "}
+                <input
+                  type="text"
+                  name="category_tags"
+                  value={newWord.category_tags}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </div>
             <button
               className="selected-button"
               type="button"
@@ -174,16 +182,22 @@ const AddWordsPageComponent = () => {
               Add Tag
             </button>
           </form>
-          <div className="selected-buttons">
-            {tags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => toggleTag(tag)}
-                className={selectedTags.includes(tag) ? "selected-button" : ""}
-              >
-                {tag}
-              </button>
-            ))}
+          <div className="data-vertical">
+            <div className="data-vertical-left">
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => toggleTag(tag)}
+                  className={
+                    selectedTags.includes(tag)
+                      ? "selected-button"
+                      : "small-button"
+                  }
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
         <div className="confirm-cancel">

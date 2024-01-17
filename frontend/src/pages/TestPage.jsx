@@ -1,7 +1,6 @@
 import NavigationBar from "./NavigationBar";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import React from "react";
 
 const TestPageComponent = () => {
   const navigate = useNavigate();
@@ -33,6 +32,10 @@ const TestPageComponent = () => {
 
     // Navigate to the next page with the results
     navigate(`/results-page`, { state: { userResponses } });
+  };
+
+  const handleTransition = (path) => {
+    navigate(path);
   };
 
   const handleInputChange = (index, event) => {
@@ -78,8 +81,6 @@ const TestPageComponent = () => {
     getRandomWords();
   }, [words, wordsNum]);
 
-  console.log(wordsNum);
-
   return (
     <>
       <NavigationBar />
@@ -88,36 +89,52 @@ const TestPageComponent = () => {
         {randomWords.map((word, index) => (
           <li key={word.id} className="list-item">
             {lang === "fin" ? (
-              <div>
-                <span className="question-word">{word.finnish_word}</span>
-                <span className="question-word">
-                  <label>
-                    <input
-                      type="text"
-                      value={userInputs[index]}
-                      onChange={(event) => handleInputChange(index, event)}
-                    />
-                  </label>
-                </span>
+              <div className="data-vertical">
+                <div className="data-vertical-left">
+                  <span className="question-word">{word.finnish_word}</span>
+                </div>
+
+                <div className="data-vertical-right">
+                  <span className="question-word">
+                    <label className="label-margin">
+                      <input
+                        className="padding"
+                        type="text"
+                        value={userInputs[index]}
+                        onChange={(event) => handleInputChange(index, event)}
+                      />
+                    </label>
+                  </span>
+                </div>
               </div>
             ) : (
-              <div>
-                <span className="question-word">{word.english_word}</span>
-                <span className="question-word">
-                  <label>
-                    <input
-                      type="text"
-                      value={userInputs[index]}
-                      onChange={(event) => handleInputChange(index, event)}
-                    />
-                  </label>
-                </span>
+              <div className="data-vertical">
+                <div className="data-vertical-left">
+                  <span className="question-word">{word.english_word}</span>
+                </div>
+
+                <div className="data-vertical-right">
+                  <span className="question-word">
+                    <label>
+                      <input
+                        type="text"
+                        value={userInputs[index]}
+                        onChange={(event) => handleInputChange(index, event)}
+                      />
+                    </label>
+                  </span>
+                </div>
               </div>
             )}
           </li>
         ))}
       </ul>
-      <button onClick={() => handleButtonClick()}>Submit Answers</button>
+      <div className="center">
+        <button className="selected-button" onClick={() => handleButtonClick()}>
+          Submit Answers
+        </button>
+        <button onClick={() => handleTransition("/first-page")}>back</button>
+      </div>
     </>
   );
 };

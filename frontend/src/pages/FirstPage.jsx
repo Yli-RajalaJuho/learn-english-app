@@ -121,7 +121,11 @@ const FirstPageComponent = () => {
               <button
                 key={tag}
                 onClick={() => toggleTag(tag)}
-                className={selectedTags.includes(tag) ? "selected-button" : ""}
+                className={
+                  selectedTags.includes(tag)
+                    ? "selected-button"
+                    : "small-button"
+                }
               >
                 {tag}
               </button>
@@ -150,13 +154,13 @@ const FirstPageComponent = () => {
           <div className="test-lang">
             <button
               onClick={handleLangFin}
-              className={lang === "fin" ? "selected-button" : ""}
+              className={lang === "fin" ? "selected-button" : "small-button"}
             >
               FIN
             </button>
             <button
               onClick={handleLangEng}
-              className={lang === "eng" ? "selected-button" : ""}
+              className={lang === "eng" ? "selected-button" : "small-button"}
             >
               ENG
             </button>

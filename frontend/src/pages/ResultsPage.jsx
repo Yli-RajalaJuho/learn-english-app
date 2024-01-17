@@ -94,17 +94,42 @@ const ResultsPageComponent = () => {
         {userResponses.map((response, index) => (
           <li key={index}>
             <div className="list-item">
-              <span className="word-id">{response.question}</span>
-              <span className="user-answer">
-                {response.userAnswer.length === 0
-                  ? "empty"
-                  : response.userAnswer}
-              </span>
-              <span className={response.isCorrect ? "correct" : "incorrect"}>
-                {response.isCorrect
-                  ? " (Correct)"
-                  : ` (Incorrect) ${response.correctAnswer}`}
-              </span>
+              <div className="data-vertical">
+                <label className="label-margin">
+                  Test Word:{" "}
+                  <span className="english-word">{response.question}</span>
+                </label>
+
+                <label className="label-margin">
+                  Your Answer:{" "}
+                  <span className="user-answer">
+                    {response.userAnswer.length === 0
+                      ? "empty"
+                      : response.userAnswer}
+                  </span>
+                </label>
+
+                <div>
+                  <label className="label-margin">
+                    <span
+                      className={response.isCorrect ? "correct" : "incorrect"}
+                    >
+                      {response.isCorrect ? " (Correct)" : " (Incorrect)"}
+                    </span>
+                  </label>
+
+                  <>
+                    {response.isCorrect ? null : (
+                      <label className="label-margin">
+                        <span className="correct">
+                          Correct answer{": "}
+                          {response.correctAnswer}
+                        </span>
+                      </label>
+                    )}
+                  </>
+                </div>
+              </div>
             </div>
           </li>
         ))}

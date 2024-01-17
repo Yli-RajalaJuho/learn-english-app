@@ -37,11 +37,59 @@
 }
 
 .mediocre {
-  background-color: #b49300;
+  background-color: #a6954f;
 }
 
 .great {
   background-color: #56ae56;
+}
+
+.score-color-bad {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: #242424;
+  color: rgb(255, 44, 44);
+  font-weight: bold;
+  font-size: 1.5em;
+  font-style: oblique;
+  /*border-color: #982525;
+  background-color: #98252574;
+  */
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.score-color-mediocre {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: #242424;
+  color: #ffe678;
+  font-weight: bold;
+  font-size: 1.5em;
+  font-style: oblique;
+  /*border-color: #a6954f;
+  background-color: #a6954f;
+  */
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.score-color-great {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: #242424;
+  color: #7c85ff;
+  font-weight: bold;
+  font-size: 1.5em;
+  font-style: oblique;
+  /*border-color: #56ae56;
+  background-color: #56ae566f;
+  */
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }
 
 p {
@@ -50,9 +98,11 @@ p {
   font-weight: bold;
   flex-basis: 100%;
   white-space: normal;
+  font-style: oblique;
 }
 
 .img-button {
+  /*
   position: relative;
   margin: 10px;
   border-radius: 8px;
@@ -62,6 +112,17 @@ p {
   font-weight: 500;
   font-family: inherit;
   background-color: #525252;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  */
+  margin: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.9em 1.8em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #747474;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -104,7 +165,7 @@ p {
   padding: 10px;
   display: flex;
   align-items: center;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-evenly;
   margin-bottom: 10px;
   background-color: #1a1a1a;
@@ -237,7 +298,8 @@ p {
 .list-item {
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid white;
+  background-color: #7c85ff08;
   border-radius: 5px;
 }
 
@@ -267,7 +329,7 @@ p {
 }
 
 .incorrect {
-  color: rgb(150, 59, 59);
+  color: rgb(255, 44, 44);
 }
 
 .score-id {
@@ -282,7 +344,6 @@ p {
 
 .score {
   margin-left: 10px;
-  color: #ffffff;
 }
 
 .correct-words {
@@ -322,6 +383,7 @@ p {
   padding: 5px;
   font-size: 1.2em;
   line-height: 1;
+  font-style: oblique;
 }
 
 .error-msg {
@@ -363,6 +425,7 @@ h1 {
   text-align: center;
   font-size: 3.2em;
   line-height: 1.1;
+  font-style: oblique;
 }
 
 h2 {
@@ -371,6 +434,7 @@ h2 {
   text-align: center;
   font-size: 3.2em;
   line-height: 1.1;
+  font-style: oblique;
 }
 
 h3 {
@@ -379,6 +443,7 @@ h3 {
   padding: 10px;
   font-size: 1.4em;
   line-height: 1;
+  font-style: oblique;
 }
 
 button {
@@ -396,10 +461,10 @@ button {
 }
 
 .small-button {
-  margin: 5px;
-  border-radius: 4px;
+  margin: 10px;
+  border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.3em 0.6em;
+  padding: 0.5em 1em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -409,10 +474,10 @@ button {
 }
 
 .delete-button {
-  margin: 5px;
-  border-radius: 4px;
+  margin: 10px;
+  border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.3em 0.6em;
+  padding: 0.5em 1em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;

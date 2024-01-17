@@ -178,24 +178,28 @@ const PatchWordPageComponent = () => {
         <>
           <div className="select-tags">
             <form className="tags-form">
-              <label className="label-margin">
-                English Word{": "}
-                <input
-                  type="text"
-                  name="english_word"
-                  value={patchWords[0].english_word}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label className="label-margin">
-                Finnish Word{": "}
-                <input
-                  type="text"
-                  name="finnish_word"
-                  value={patchWords[0].finnish_word}
-                  onChange={handleInputChange}
-                />
-              </label>
+              <div className="data-vertical-right">
+                <label className="label-margin">
+                  English Word{": "}
+                  <input
+                    type="text"
+                    name="english_word"
+                    value={patchWords[0].english_word}
+                    onChange={handleInputChange}
+                  />
+                </label>
+              </div>
+              <div className="data-vertical-right">
+                <label className="label-margin">
+                  Finnish Word{": "}
+                  <input
+                    type="text"
+                    name="finnish_word"
+                    value={patchWords[0].finnish_word}
+                    onChange={handleInputChange}
+                  />
+                </label>
+              </div>
             </form>
           </div>
 
@@ -203,15 +207,17 @@ const PatchWordPageComponent = () => {
 
           <div className="select-tags">
             <form className="tags-form">
-              <label className="label-margin">
-                Create new Tags{": "}
-                <input
-                  type="text"
-                  name="category_tags"
-                  value={newTagInput}
-                  onChange={(e) => setNewTagInput(e.target.value)}
-                />
-              </label>
+              <div className="data-vertical-right">
+                <label className="label-margin">
+                  Create new Tags{": "}
+                  <input
+                    type="text"
+                    name="category_tags"
+                    value={newTagInput}
+                    onChange={(e) => setNewTagInput(e.target.value)}
+                  />
+                </label>
+              </div>
               <button
                 className="selected-button"
                 type="button"
@@ -220,18 +226,22 @@ const PatchWordPageComponent = () => {
                 Add Tag
               </button>
             </form>
-            <div className="selected-buttons">
-              {tags.map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
-                  className={
-                    selectedTags.includes(tag) ? "selected-button" : ""
-                  }
-                >
-                  {tag}
-                </button>
-              ))}
+            <div className="data-vertical">
+              <div className="data-vertical-left">
+                {tags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    className={
+                      selectedTags.includes(tag)
+                        ? "selected-button"
+                        : "small-button"
+                    }
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           <div className="confirm-cancel">

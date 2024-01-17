@@ -118,68 +118,84 @@ const InspectWordsPageComponent = () => {
 
         <div className="sort-container">
           <div className="selected-buttons">
-            <div className="searchbar">
-              <label className="label-margin">
-                Search{": "}
-                <input
-                  type="text"
-                  value={searchInput}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  placeholder="Search..."
-                />
-              </label>
+            <div className="data-vertical-right">
+              <div className="searchbar">
+                <label className="label-margin">
+                  Search{": "}
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => handleSearch(e.target.value)}
+                    placeholder="Search..."
+                  />
+                </label>
+              </div>
             </div>
 
-            <button
-              onClick={() => handleSortOrder("asc")}
-              className={
-                sortOrder === "asc" ? "selected-img-button" : "img-button"
-              }
-            >
-              <img
-                className="button-image"
-                src={DownArrow}
-                alt="ascending-order"
-              ></img>
-            </button>
-            <button
-              onClick={() => handleSortOrder("desc")}
-              className={
-                sortOrder === "desc" ? "selected-img-button" : "img-button"
-              }
-            >
-              <img
-                className="button-image"
-                src={upArrow}
-                alt="descending-order"
-              ></img>
-            </button>
+            <div className="data-vertical-right">
+              <div className="label-margin">
+                <button
+                  onClick={() => handleSortOrder("asc")}
+                  className={
+                    sortOrder === "asc" ? "selected-img-button" : "img-button"
+                  }
+                >
+                  <img
+                    className="button-image"
+                    src={DownArrow}
+                    alt="ascending-order"
+                  ></img>
+                </button>
+                <button
+                  onClick={() => handleSortOrder("desc")}
+                  className={
+                    sortOrder === "desc" ? "selected-img-button" : "img-button"
+                  }
+                >
+                  <img
+                    className="button-image"
+                    src={upArrow}
+                    alt="descending-order"
+                  ></img>
+                </button>
+              </div>
+            </div>
           </div>
           <div className="selected-buttons">
-            <button
-              onClick={() => handleSortable("id")}
-              className={sortable === "id" ? "selected-button" : ""}
-            >
-              Id
-            </button>
-            <button
-              onClick={() => handleSortable("eng")}
-              className={sortable === "eng" ? "selected-button" : ""}
-            >
-              Eng
-            </button>
-            <button
-              onClick={() => handleSortable("fin")}
-              className={sortable === "fin" ? "selected-button" : ""}
-            >
-              Fin
-            </button>
-            <button
-              onClick={() => handleSortable("tags")}
-              className={sortable === "tags" ? "selected-button" : ""}
-            >
-              Tags
-            </button>
+            <div className="data-vertical-right">
+              <button
+                onClick={() => handleSortable("id")}
+                className={
+                  sortable === "id" ? "selected-button" : "small-button"
+                }
+              >
+                Id
+              </button>
+              <button
+                onClick={() => handleSortable("eng")}
+                className={
+                  sortable === "eng" ? "selected-button" : "small-button"
+                }
+              >
+                Eng
+              </button>
+              <button
+                onClick={() => handleSortable("fin")}
+                className={
+                  sortable === "fin" ? "selected-button" : "small-button"
+                }
+              >
+                Fin
+              </button>
+              <button
+                onClick={() => handleSortable("tags")}
+                className={
+                  sortable === "tags" ? "selected-button" : "small-button"
+                }
+              >
+                Tags
+              </button>
+            </div>
           </div>
         </div>
 
