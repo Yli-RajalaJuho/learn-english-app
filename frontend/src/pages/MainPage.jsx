@@ -14,9 +14,6 @@ const MainPageComponent = () => {
       <NavigationBar />
       <h1>Learn English</h1>
       <div className="selected-buttons">
-        <button onClick={() => handleButtonClick("/inspect-words")}>
-          Edit Words
-        </button>
         <button
           className="start-test"
           onClick={() => handleButtonClick("/first-page")}

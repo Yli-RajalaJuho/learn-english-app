@@ -11,10 +11,10 @@ const NavigationBar = () => {
   return (
     <nav className="main-navbar">
       <button onClick={() => handleButtonClick("/")}>Home</button>
+      <button onClick={() => handleButtonClick("/inspect-words")}>Words</button>
       <button onClick={() => handleButtonClick("/scoreboard-page")}>
         Scoreboard
       </button>
-      <button onClick={() => handleButtonClick("/about")}>About</button>
       <button
         className="selected-button"
         onClick={() => handleButtonClick("/first-page")}

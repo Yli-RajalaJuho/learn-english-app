@@ -154,9 +154,6 @@ const PatchWordPageComponent = () => {
     }
   };
 
-  console.log(patchWords[0]);
-  console.log(selectedTags);
-
   return (
     <div className="add-words-page">
       <h1>Edit Word</h1>
@@ -201,6 +198,9 @@ const PatchWordPageComponent = () => {
               </label>
             </form>
           </div>
+
+          <h2>Tags</h2>
+
           <div className="select-tags">
             <form className="tags-form">
               <label className="label-margin">
@@ -212,7 +212,11 @@ const PatchWordPageComponent = () => {
                   onChange={(e) => setNewTagInput(e.target.value)}
                 />
               </label>
-              <button type="button" onClick={handleAddTagClick}>
+              <button
+                className="selected-button"
+                type="button"
+                onClick={handleAddTagClick}
+              >
                 Add Tag
               </button>
             </form>

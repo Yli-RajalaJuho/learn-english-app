@@ -13,13 +13,91 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.data-vertical {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: left;
+  padding: 10px;
+}
+
+.data-vertical-left {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.data-vertical-right {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.bad {
+  background-color: #982525;
+}
+
+.mediocre {
+  background-color: #b49300;
+}
+
+.great {
+  background-color: #56ae56;
+}
+
+p {
+  font-size: 1em;
+  line-height: 0.5em;
+  font-weight: bold;
+  flex-basis: 100%;
+  white-space: normal;
+}
+
+.img-button {
+  position: relative;
+  margin: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 1em 2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #525252;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+.selected-img-button {
+  position: relative;
+  margin: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 1em 2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #7c85ff;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+.button-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: auto;
+}
+
 .main-navbar {
   display: flex;
   align-items: center;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   top: 0;
   background-color: #1a1a1a;
+  padding: 10px;
 }
 
 .sort-container {
@@ -40,7 +118,10 @@
 
 .left-center {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: left;
   margin-bottom: 10px;
 }
 
@@ -49,22 +130,26 @@
   margin-right: 25px;
   margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+}
+
+.extra-padding {
+  margin-left: 10px;
 }
 
 .test-lang {
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: left;
   align-items: center;
   padding: 10px;
 }
 
 .test-words {
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: left;
   align-items: center;
   padding: 10px;
 }
@@ -108,6 +193,11 @@
   background-color: #7c85ff;
 }
 
+.unselect {
+  background-color: #982525;
+  font-weight: bold;
+}
+
 .create-eng-fin-words {
   padding: 20px;
   margin-bottom: 20px;
@@ -134,11 +224,14 @@
 
 .label-margin {
   margin: 10px;
+  font-size: 1em;
+  line-height: 0.5em;
+  font-weight: bold;
 }
 
 .basic-list {
   font-weight: bold;
-  color: rgb(130, 130, 130);
+  color: rgb(255, 255, 255);
 }
 
 .list-item {
@@ -155,7 +248,7 @@
 
 .english-word {
   margin-left: 10px;
-  color: #858585;
+  color: #ffe678;
 }
 
 .finnish-word {
@@ -182,8 +275,14 @@
   color: #7c85ff;
 }
 
+.score-date {
+  margin-left: 10px;
+  color: #ffe678;
+}
+
 .score {
   margin-left: 10px;
+  color: #ffffff;
 }
 
 .correct-words {
@@ -283,10 +382,11 @@ h3 {
 }
 
 button {
+  position: relative;
   margin: 10px;
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  padding: 0.7em 1.4em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;

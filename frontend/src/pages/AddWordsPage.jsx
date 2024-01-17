@@ -166,7 +166,11 @@ const AddWordsPageComponent = () => {
                 onChange={handleInputChange}
               />
             </label>
-            <button type="button" onClick={handleAddTagClick}>
+            <button
+              className="selected-button"
+              type="button"
+              onClick={handleAddTagClick}
+            >
               Add Tag
             </button>
           </form>

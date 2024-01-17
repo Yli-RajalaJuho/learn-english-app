@@ -7,7 +7,6 @@ import ScoreboardPageComponent from "./pages/ScoreboardPage";
 import InspectWordsPageComponent from "./pages/InspectWordsPage";
 import AddWordsPageComponent from "./pages/AddWordsPage";
 import PatchWordPageComponent from "./pages/PatchWordPage";
-import AboutPageComponent from "./pages/AboutPage";
 
 /*
 import { Provider } from "react-redux";
@@ -30,7 +29,6 @@ function App() {
           element={<TestPageComponent />}
         />
         <Route path="/inspect-words" element={<InspectWordsPageComponent />} />
-        <Route path="/about" element={<AboutPageComponent />} />
       </Routes>
     </BrowserRouter>
   );

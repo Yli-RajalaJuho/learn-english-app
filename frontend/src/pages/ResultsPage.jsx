@@ -9,7 +9,9 @@ const ResultsPageComponent = () => {
     score: "",
     correct_words: "",
     incorrect_words: "",
+    date: "",
   });
+  const [grade, setGrade] = useState("");
 
   useEffect(() => {
     // Calculate score, correct words, and incorrect words
@@ -21,6 +23,10 @@ const ResultsPageComponent = () => {
     );
 
     const score = `${correctAnswers.length}/${userResponses.length}`;
+
+    const currentDate = new Date();
+    const date = currentDate.toLocaleDateString();
+
     const correctWords = correctAnswers
       .map((response) => response.question)
       .join(",");
@@ -32,7 +38,23 @@ const ResultsPageComponent = () => {
       score,
       correct_words: correctWords,
       incorrect_words: incorrectWords,
+      date,
     });
+
+    let calculatedGrade = "";
+    const avg = userResponses.length * 0.25;
+    if (correctAnswers.length < avg) {
+      calculatedGrade = "bad";
+    } else if (
+      correctAnswers.length >= avg &&
+      correctAnswers.length < userResponses.length
+    ) {
+      calculatedGrade = "mediocre";
+    } else if (correctAnswers.length == userResponses.length) {
+      calculatedGrade = "great";
+    }
+
+    setGrade(calculatedGrade);
   }, [userResponses]);
 
   useEffect(() => {
@@ -64,7 +86,10 @@ const ResultsPageComponent = () => {
     <>
       <NavigationBar />
       <h1>Results</h1>
-      <h3>Your got {newScore.score} words right!!!</h3>
+      <div className={`${grade}`}>
+        <h3>Your got {newScore.score} words right!!!</h3>
+      </div>
+
       <ul>
         {userResponses.map((response, index) => (
           <li key={index}>

@@ -44,8 +44,9 @@ module.exports = {
       score: { type: "string", minLength: 1 },
       correct_words: { type: "string", minLength: 0 },
       incorrect_words: { type: "string", minLength: 0 },
+      date: { type: "string", minLength: 0 },
     },
-    required: ["score", "correct_words", "incorrect_words"],
+    required: ["score", "correct_words", "incorrect_words", "date"],
     additionalProperties: false,
   },
 };

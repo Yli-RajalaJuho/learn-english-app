@@ -16,11 +16,11 @@ module.exports = {
             message: validate.errors,
           });
         } else {
-          const sql = `INSERT INTO Scores (score, correct_words, incorrect_words) values (?, ?, ?)`;
+          const sql = `INSERT INTO Scores (score, correct_words, incorrect_words, date) values (?, ?, ?, ?)`;
 
           connection.query(
             sql,
-            [data.score, data.correct_words, data.incorrect_words],
+            [data.score, data.correct_words, data.incorrect_words, data.date],
             (err) => {
               if (err) {
                 console.error(err);

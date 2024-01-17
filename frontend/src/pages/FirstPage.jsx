@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 const FirstPageComponent = () => {
   const navigate = useNavigate();
-  const [wordsNum, setWordsNum] = useState(5);
+  const [wordsNum, setWordsNum] = useState(1);
   const [lang, setLang] = useState("fin");
   const [words, setWords] = useState([]);
   const [tags, setTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [possibleWordsCount, setPossibleWordsCount] = useState(5);
+  const [possibleWordsCount, setPossibleWordsCount] = useState(1);
 
   const [validWordsNum, setValidWordsNum] = useState(true);
 
@@ -19,6 +19,14 @@ const FirstPageComponent = () => {
         selectedTags.length > 0 ? selectedTags.join(",") : "all";
       navigate(`/test-page/${wordsNum}/${lang}/${tagsParam}`);
     }
+  };
+
+  const handleTransition = (path) => {
+    navigate(path);
+  };
+
+  const handleUnselectAll = () => {
+    setSelectedTags([]);
   };
 
   useEffect(() => {
@@ -89,6 +97,7 @@ const FirstPageComponent = () => {
 
     if (selectedTags.length !== 0) {
       setPossibleWordsCount(filteredWords.length);
+      setWordsNum(filteredWords.length);
     } else {
       setPossibleWordsCount(words.length);
     }
@@ -97,7 +106,7 @@ const FirstPageComponent = () => {
   return (
     <>
       <NavigationBar />
-      <h1>First Page</h1>
+      <h1>Test Setup</h1>
       {validWordsNum === false ? (
         <p className="error-msg">
           Please set the number of words on the test to higher than 0 and{" "}
@@ -106,10 +115,8 @@ const FirstPageComponent = () => {
       ) : null}
       <div className="test-init-form">
         <div className="select-tags">
-          <p className="center">
-            What type of words should be on the test based on tags
-          </p>
-          <div className="selected-buttons">
+          <p>Select words based on tags</p>
+          <div className="select-buttons">
             {tags.map((tag) => (
               <button
                 key={tag}
@@ -120,45 +127,48 @@ const FirstPageComponent = () => {
               </button>
             ))}
           </div>
+          <button className="unselect" onClick={() => handleUnselectAll()}>
+            unselect-all
+          </button>
         </div>
         <div className="select-tags">
+          <p>Number of Words on the Test{": "}</p>
           <div className="test-words">
-            <label className="label-margin">
-              Number of Words on the Test{": "}
-              <input
-                type="number"
-                value={wordsNum}
-                onChange={handleInputChange}
-                min="1"
-                max={possibleWordsCount || words.length}
-              />
-            </label>
+            <input
+              className="extra-padding"
+              type="number"
+              value={wordsNum}
+              onChange={handleInputChange}
+              min="1"
+              max={possibleWordsCount}
+            />
           </div>
         </div>
 
         <div className="select-tags">
+          <p>Language of words:</p>
           <div className="test-lang">
-            <p>See Test Words in Finnish or English</p>
-            <div className="selected-buttons">
-              <button
-                onClick={handleLangFin}
-                className={lang === "fin" ? "selected-button" : ""}
-              >
-                FIN
-              </button>
-              <button
-                onClick={handleLangEng}
-                className={lang === "eng" ? "selected-button" : ""}
-              >
-                ENG
-              </button>
-            </div>
+            <button
+              onClick={handleLangFin}
+              className={lang === "fin" ? "selected-button" : ""}
+            >
+              FIN
+            </button>
+            <button
+              onClick={handleLangEng}
+              className={lang === "eng" ? "selected-button" : ""}
+            >
+              ENG
+            </button>
           </div>
         </div>
 
-        <button className="start-test" onClick={handleButtonClick}>
-          Start Test
-        </button>
+        <div className="center">
+          <button className="start-test" onClick={handleButtonClick}>
+            Start
+          </button>
+          <button onClick={() => handleTransition("/")}>back</button>
+        </div>
       </div>
     </>
   );

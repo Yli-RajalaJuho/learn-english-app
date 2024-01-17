@@ -1,6 +1,7 @@
 import NavigationBar from "./NavigationBar";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import React from "react";
 
 const TestPageComponent = () => {
   const navigate = useNavigate();
