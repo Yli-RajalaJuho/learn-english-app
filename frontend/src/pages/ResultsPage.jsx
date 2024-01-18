@@ -81,13 +81,16 @@ const ResultsPageComponent = () => {
   useEffect(() => {
     const handleSave = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/scores/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newScore),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/scores/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newScore),
+          }
+        );
 
         if (response.ok) {
           console.log("Test result saved successfully!");

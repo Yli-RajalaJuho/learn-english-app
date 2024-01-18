@@ -33,6 +33,11 @@ app.use("/api/words", wordsRouter);
 app.use("/api/scores", scoresRouter);
 
 /**
+ * Use frontends dist folder
+ */
+app.use(express.static("./frontend/dist"));
+
+/**
  * The server's port number.
  *
  * @type {number}

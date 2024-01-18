@@ -35,7 +35,9 @@ const ScoreBoardPageComponent = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/scores/?searchTerm=${searchInput}&sortOrder=${sortOrder}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/scores/?searchTerm=${searchInput}&sortOrder=${sortOrder}`
       );
       const result = await response.json();
 
@@ -103,9 +105,12 @@ const ScoreBoardPageComponent = () => {
    */
   const deleteAllScores = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/scores/`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/scores/`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         // If the response is successful, update the list of scores

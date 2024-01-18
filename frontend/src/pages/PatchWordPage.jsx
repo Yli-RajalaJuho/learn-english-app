@@ -55,7 +55,9 @@ const PatchWordPageComponent = () => {
    */
   const fetchWordData = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/words/${id}`);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/words/${id}`
+      );
       if (response.ok) {
         const wordData = await response.json();
         setDisplayWords(wordData);
@@ -116,16 +118,19 @@ const PatchWordPageComponent = () => {
   const handleSaveButtonClick = async () => {
     try {
       patchWords[0].category_tags = "";
-      const response = await fetch(`http://localhost:8080/api/words/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...patchWords[0],
-          category_tags: selectedTags.join(", "),
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/words/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...patchWords[0],
+            category_tags: selectedTags.join(", "),
+          }),
+        }
+      );
 
       if (response.ok) {
         // After successfully updating, navigate back to inspect-words
@@ -147,7 +152,9 @@ const PatchWordPageComponent = () => {
    */
   const fetchWords = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/words/");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/words/`
+      );
       const result = await response.json();
       setWords(result);
     } catch (error) {

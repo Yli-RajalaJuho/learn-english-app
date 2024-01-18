@@ -68,7 +68,9 @@ const InspectWordsPageComponent = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/words/search?searchTerm=${searchInput}&sortable=${sortable}&sortOrder=${sortOrder}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/words/search?searchTerm=${searchInput}&sortable=${sortable}&sortOrder=${sortOrder}`
       );
       const result = await response.json();
       if (response.ok) {
@@ -122,9 +124,12 @@ const InspectWordsPageComponent = () => {
     }, 2000);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/words/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/words/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         // If the response is successful, update the list of words

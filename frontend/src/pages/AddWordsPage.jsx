@@ -40,7 +40,9 @@ const AddWordsPageComponent = () => {
    */
   const fetchWords = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/words/");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/words/`
+      );
       const result = await response.json();
       setWords(result);
     } catch (error) {
@@ -158,16 +160,19 @@ const AddWordsPageComponent = () => {
    */
   const handleSaveButtonClick = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/words/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...newWord,
-          category_tags: selectedTags.join(","),
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/words/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...newWord,
+            category_tags: selectedTags.join(","),
+          }),
+        }
+      );
 
       if (response.ok) {
         setValidInput(true);

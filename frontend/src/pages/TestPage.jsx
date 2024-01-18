@@ -81,7 +81,9 @@ const TestPageComponent = () => {
    */
   const fetchWords = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/words/");
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/words/`
+      );
       const result = await response.json();
 
       // Check if tags include "all" and include all words
