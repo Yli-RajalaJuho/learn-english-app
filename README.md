@@ -3,11 +3,16 @@
 ## Overview
 
 Learn English is an application with the purpose of making learning english or finnish easy.
+
+First step is to setup a test
+
+![Test_setup](./images/test-setup.png)
+
 The enduser can try to correctly translate each word from finnish to english or vice versa.
 
 ![Test_empty](./images/test-empty.png)
 
-And when the enduser submits their answers the application will tell them how well they did.
+When the enduser submits their answers the application will tell them how well they did.
 
 ![Results_great](./images/results-great.png)
 ![Results_mediocre](./images/results-mediocre.png)
@@ -21,7 +26,7 @@ The application runs with a database from where it gets its data for the words a
 
 This application also provides the opportunity for the enduser to create more words, delete or edit the existing words.
 
-![Add_word](./images/add-word.png)
+![Add_word](./images/add-new-word.png)
 ![Edit_word](./images/edit-word.png)
 ![Delete_word](./images/delete-word.png)
 
