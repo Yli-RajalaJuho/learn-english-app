@@ -5,6 +5,7 @@
 Learn English is an application with the purpose of making learning english or finnish easy.
 The enduser can try to correctly translate each word from finnish to english or vice versa.
 Scores are saved into the databse for the enduser to track down their progress.
+![Scoreboard_1](./images/scoreboard-1.png)![Scoreboard_2](./images/scoreboard-2.png)
 
 The application runs with a database from where it gets its data for the words and scores.
 This application also provides the opportunity for the enduser to create more words, delete or edit the existing words.
