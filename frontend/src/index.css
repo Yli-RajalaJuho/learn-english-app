@@ -528,4 +528,18 @@ button:focus-visible {
     color: #ffffff;
     background-color: #242424;
   }
+
+  button {
+    background-color: #525252;
+    color: #ffffff;
+  }
+
+  button:hover {
+    border-color: #646cff;
+  }
+
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
 }
