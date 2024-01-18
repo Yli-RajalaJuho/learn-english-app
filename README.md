@@ -33,3 +33,28 @@ project-root
 |   |   |-- index.js
 |-- docs
 ```
+
+## Installation
+
+First download the repository to your computer.
+
+After that you can then simply install the app and run it with these commands
+
+Install dependencies:
+
+```plaintext
+npm run install-all
+```
+
+Run the app:
+
+```plaintext
+npm run start
+```
+
+Or if you want to run frontend and backend separately:
+
+```plaintext
+npm run start-frontend
+npm run start-backend
+```
