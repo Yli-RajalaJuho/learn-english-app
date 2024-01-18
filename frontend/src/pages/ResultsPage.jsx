@@ -2,9 +2,17 @@ import NavigationBar from "./NavigationBar";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+/**
+ * React component for displaying test results.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the ResultsPageComponent.
+ */
 const ResultsPageComponent = () => {
   const location = useLocation();
   const { userResponses } = location.state || {};
+
+  // State variables
   const [newScore, setNewScore] = useState({
     score: "",
     correct_words: "",
@@ -13,6 +21,13 @@ const ResultsPageComponent = () => {
   });
   const [grade, setGrade] = useState("");
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the data of the word when @param userResponses gets to be known.
+   * Calculates and updates the score, correct words, incorrect words, and date for @param newScore.
+   *
+   * @returns {void}
+   */
   useEffect(() => {
     // Calculate score, correct words, and incorrect words
     const correctAnswers = userResponses.filter(
@@ -57,6 +72,12 @@ const ResultsPageComponent = () => {
     setGrade(calculatedGrade);
   }, [userResponses]);
 
+  /**
+   * Effect hook that runs after every render.
+   * Handles saving the test result to the server instantly after @param newScore is completely ready.
+   *
+   * @returns {void}
+   */
   useEffect(() => {
     const handleSave = async () => {
       try {
@@ -82,6 +103,11 @@ const ResultsPageComponent = () => {
     handleSave();
   }, [newScore]);
 
+  /**
+   * Renders the ResultsPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
   return (
     <>
       <NavigationBar />

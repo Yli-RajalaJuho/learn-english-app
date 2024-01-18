@@ -2,8 +2,16 @@ import { useState, useEffect } from "react";
 import NavigationBar from "./NavigationBar";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * React component for configuring the test setup.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the FirstPageComponent.
+ */
 const FirstPageComponent = () => {
   const navigate = useNavigate();
+
+  // State variables
   const [wordsNum, setWordsNum] = useState(1);
   const [lang, setLang] = useState("fin");
   const [words, setWords] = useState([]);
@@ -13,6 +21,11 @@ const FirstPageComponent = () => {
 
   const [validWordsNum, setValidWordsNum] = useState(true);
 
+  /**
+   * Handles navigation to the test page with the configured setup.
+   *
+   * @returns {void}
+   */
   const handleButtonClick = () => {
     if (validWordsNum === true) {
       const tagsParam =
@@ -21,14 +34,33 @@ const FirstPageComponent = () => {
     }
   };
 
+  /**
+   * Handles navigation to a specified path.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
   const handleTransition = (path) => {
     navigate(path);
   };
 
+  /**
+   * Handles unselecting all tags.
+   *
+   * @returns {void}
+   */
   const handleUnselectAll = () => {
     setSelectedTags([]);
   };
 
+  /**
+   * Effect hook that runs after every render.
+   * Sets the @param validWordsNum to true or false
+   * based on how many possible words are currently available when the @param wordsNum changes
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     if (wordsNum > possibleWordsCount || wordsNum <= 0) {
       setValidWordsNum(false);
@@ -37,20 +69,42 @@ const FirstPageComponent = () => {
     }
   }, [wordsNum]);
 
+  /**
+   * Handles input change for the number of words.
+   *
+   * @param {Object} event - The input change event.
+   * @returns {void}
+   */
   const handleInputChange = (event) => {
     const { value } = event.target;
 
     setWordsNum(value);
   };
 
+  /**
+   * Handles selecting the words to be in Finnish.
+   *
+   * @returns {void}
+   */
   const handleLangFin = () => {
     setLang("fin");
   };
 
+  /**
+   * Handles selecting the words to be in English.
+   *
+   * @returns {void}
+   */
   const handleLangEng = () => {
     setLang("eng");
   };
 
+  /**
+   * Toggles the clicked tag on and off making it selected or unselected
+   *
+   * @param {string} tag - The tag to toggle on and off
+   * @returns {void}
+   */
   const toggleTag = (tag) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
@@ -59,6 +113,12 @@ const FirstPageComponent = () => {
     );
   };
 
+  /**
+   * Fetches words from the server.
+   *
+   * @async
+   * @returns {void}
+   */
   const fetchWords = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/words/");
@@ -69,6 +129,11 @@ const FirstPageComponent = () => {
     }
   };
 
+  /**
+   * Fetches tags and updates the state.
+   *
+   * @returns {void}
+   */
   const fetchTags = () => {
     const uniqueTags = Array.from(
       new Set(
@@ -80,14 +145,37 @@ const FirstPageComponent = () => {
     setTags(uniqueTags);
   };
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the words whenever the @param selectedTags changes.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchWords();
   }, [selectedTags]);
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the tags whenever the @param words changes.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchTags();
   }, [words]);
 
+  /**
+   * Effect hook that runs after every render.
+   * Sets the @param wordsNum to be the number of @param possibleWordsCount if tags are being selected.
+   * If no tags are selected then the maximum number of words is @param possibleWordsCount
+   * Effect runs every time @param selectedTags or @param words changes.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     // Filter words based on selected tags and update the count
     const filteredWords = words.filter((word) => {
@@ -103,6 +191,11 @@ const FirstPageComponent = () => {
     }
   }, [selectedTags, words]);
 
+  /**
+   * Renders the FirstPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
   return (
     <>
       <NavigationBar />

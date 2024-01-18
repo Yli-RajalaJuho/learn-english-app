@@ -1,14 +1,30 @@
 import NavigationBar from "./NavigationBar";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * React component for the main page of the application.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the MainPageComponent.
+ */
 const MainPageComponent = () => {
   const navigate = useNavigate();
 
-  // Transition to different page
+  /**
+   * Handles navigation to a specified path.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
   const handleButtonClick = (path) => {
     navigate(path);
   };
 
+  /**
+   * Renders the MainPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
   return (
     <>
       <NavigationBar />

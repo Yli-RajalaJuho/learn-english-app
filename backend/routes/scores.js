@@ -1,9 +1,24 @@
 const database = require("../database/scoresFunctionsDB.js");
 const connections = require("../database/connectionsDB.js");
 const express = require("express");
+
+/**
+ * Express Router for handling score-related routes.
+ *
+ * @type {express.Router}
+ */
 const scoresRouter = express.Router();
 
-// SAVE DATA TO THE DATABASE ->
+/**
+ * Save data to the database.
+ *
+ * @route POST /api/scores/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 scoresRouter.post("/", async (req, res) => {
   let connection = undefined;
   try {
@@ -34,7 +49,16 @@ scoresRouter.post("/", async (req, res) => {
   }
 });
 
-// FIND ALL
+/**
+ * Retrieve all scores from the database.
+ *
+ * @route GET /api/scores/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 scoresRouter.get("/", async (req, res) => {
   let connection = undefined;
   try {
@@ -71,7 +95,16 @@ scoresRouter.get("/", async (req, res) => {
   }
 });
 
-// FIND BY ID ->
+/**
+ * Retrieve a score by its ID from the database.
+ *
+ * @route GET /api/scores/:myId([0-9]+)
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 scoresRouter.get("/:myId([0-9]+)", async (req, res) => {
   let connection = undefined;
   try {
@@ -105,7 +138,16 @@ scoresRouter.get("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-// DELETE ALL ->
+/**
+ * Delete all scores from the database.
+ *
+ * @route DELETE /api/scores/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 scoresRouter.delete("/", async (req, res) => {
   let connection = undefined;
   try {
@@ -131,7 +173,16 @@ scoresRouter.delete("/", async (req, res) => {
   }
 });
 
-// DELETE BY ID ->
+/**
+ * Delete a score by its ID from the database.
+ *
+ * @route DELETE /api/scores/:myId([0-9]+)
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 scoresRouter.delete("/:myId([0-9]+)", async (req, res) => {
   let connection = undefined;
   try {

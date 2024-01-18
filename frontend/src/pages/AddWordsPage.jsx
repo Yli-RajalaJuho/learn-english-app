@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * React component for adding new words with tags to the database.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the AddWordsPageComponent.
+ */
 const AddWordsPageComponent = () => {
   const navigate = useNavigate();
+
+  // State variables
   const [words, setWords] = useState([]);
   const [tags, setTags] = useState([]);
   const [newTags, setNewTags] = useState([]);
@@ -14,10 +22,22 @@ const AddWordsPageComponent = () => {
   });
   const [validInput, setValidInput] = useState(true);
 
+  /**
+   * Handles navigation to a specified path.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
   const handleButtonClick = (path) => {
     navigate(path);
   };
 
+  /**
+   * Fetches words from the server.
+   *
+   * @async
+   * @returns {void}
+   */
   const fetchWords = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/words/");
@@ -28,6 +48,11 @@ const AddWordsPageComponent = () => {
     }
   };
 
+  /**
+   * Fetches tags and updates the state.
+   *
+   * @returns {void}
+   */
   const fetchTags = () => {
     const uniqueOldTags = Array.from(
       new Set(
@@ -40,6 +65,13 @@ const AddWordsPageComponent = () => {
     setTags(allTags);
   };
 
+  /**
+   * Handles the click event for adding a new tag.
+   * If the tag already exists then it will be marked as selected.
+   * If it doesn't already exist then a new tag will be created and it will be marked as selected
+   *
+   * @returns {void}
+   */
   const handleAddTagClick = () => {
     const newTag = newWord.category_tags.trim();
     if (newTag) {
@@ -68,14 +100,34 @@ const AddWordsPageComponent = () => {
     }
   };
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the words whenever the @param selectedTags changes.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchWords();
   }, [selectedTags]);
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the tags whenever @param words or @param newTags changes
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchTags();
   }, [words, newTags]);
 
+  /**
+   * Toggles the clicked tag on and off making it selected or unselected
+   *
+   * @param {string} tag - The tag to toggle on and off
+   * @returns {void}
+   */
   const toggleTag = (tag) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
@@ -84,6 +136,12 @@ const AddWordsPageComponent = () => {
     );
   };
 
+  /**
+   * Handles the change event for input fields.
+   *
+   * @param {Object} event - The input change event.
+   * @returns {void}
+   */
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewWord((prevWord) => ({
@@ -92,6 +150,12 @@ const AddWordsPageComponent = () => {
     }));
   };
 
+  /**
+   * Handles the click event for saving the word to the database and then navigating out of the page
+   *
+   * @async
+   * @returns {void}
+   */
   const handleSaveButtonClick = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/words/", {
@@ -123,6 +187,11 @@ const AddWordsPageComponent = () => {
     }
   };
 
+  /**
+   * Renders the AddWordsPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
   return (
     <>
       <div className="add-words-page">
@@ -162,8 +231,8 @@ const AddWordsPageComponent = () => {
 
         <h2>Add Tags</h2>
         <div className="select-tags">
-          <form className="tags-form">
-            <div className="data-vertical-right">
+          <form className="data-vertical">
+            <div className="data-vertical-left">
               <label className="label-margin">
                 Create a new tag:{" "}
                 <input
@@ -173,14 +242,14 @@ const AddWordsPageComponent = () => {
                   onChange={handleInputChange}
                 />
               </label>
+              <button
+                className="selected-button"
+                type="button"
+                onClick={handleAddTagClick}
+              >
+                Add-Tag
+              </button>
             </div>
-            <button
-              className="selected-button"
-              type="button"
-              onClick={handleAddTagClick}
-            >
-              Add Tag
-            </button>
           </form>
           <div className="data-vertical">
             <div className="data-vertical-left">

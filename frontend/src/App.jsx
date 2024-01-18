@@ -8,12 +8,12 @@ import InspectWordsPageComponent from "./pages/InspectWordsPage";
 import AddWordsPageComponent from "./pages/AddWordsPage";
 import PatchWordPageComponent from "./pages/PatchWordPage";
 
-/*
-import { Provider } from "react-redux";
-import store from "./store";
-<Provider store={store}></Provider>
-*/
-
+/**
+ * The root component for the React application. Handles routing using `react-router-dom`.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the App component.
+ */
 function App() {
   return (
     <BrowserRouter>

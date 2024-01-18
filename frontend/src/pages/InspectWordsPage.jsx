@@ -4,8 +4,16 @@ import { useNavigate } from "react-router-dom";
 import DownArrow from ".././assets/downArrow.png";
 import upArrow from ".././assets/upArrow.png";
 
+/**
+ * React component for inspecting and managing words.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the InspectWordsPageComponent.
+ */
 const InspectWordsPageComponent = () => {
   const navigate = useNavigate();
+
+  // State variables
   const [words, setWords] = useState([]);
   const [confirm, setConfirm] = useState(false);
   const [confirmedItemId, setConfirmedItemId] = useState(null);
@@ -16,18 +24,42 @@ const InspectWordsPageComponent = () => {
   const [noData, setNoData] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  /**
+   * Handles selecting sorting order @param sortOrder of the words list.
+   *
+   * @param {string} order - The sort order ("asc" or "desc").
+   * @returns {void}
+   */
   const handleSortOrder = (order) => {
     setSortOrder(order);
   };
 
+  /**
+   * Handles selecting the @param sortable property for the words list.
+   *
+   * @param {string} sortBy - The property to sort by ("id", "eng", "fin", "tags").
+   * @returns {void}
+   */
   const handleSortable = (sortBy) => {
     setSortable(sortBy);
   };
 
+  /**
+   * Handles setting up the @param searchInput for the words list.
+   *
+   * @param {string} search - The search input.
+   * @returns {void}
+   */
   const handleSearch = (search) => {
     setSearchInput(search);
   };
 
+  /**
+   * Fetches words from the server based on @param search, @param sortable, and @param sortOrder.
+   *
+   * @async
+   * @returns {void}
+   */
   const fetchWords = async () => {
     // Set a timer to set isLoading to true after 2 seconds
     const timer = setTimeout(() => {
@@ -55,15 +87,40 @@ const InspectWordsPageComponent = () => {
     }
   };
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the words whenever @param searchInput or @param sortable or @param sortOrder changes.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchWords();
   }, [searchInput, sortable, sortOrder]);
 
+  /**
+   * Handles navigation to a specified path.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
   const handleButtonClick = (path) => {
     navigate(path);
   };
 
+  /**
+   * Deletes a word with the given id.
+   *
+   * @async
+   * @param {number} id - The id of the word to delete.
+   * @returns {void}
+   */
   const deleteWord = async (id) => {
+    // Set a timer to set isLoading to true after 2 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(true);
+    }, 2000);
+
     try {
       const response = await fetch(`http://localhost:8080/api/words/${id}`, {
         method: "DELETE",
@@ -71,31 +128,59 @@ const InspectWordsPageComponent = () => {
 
       if (response.ok) {
         // If the response is successful, update the list of words
+        setIsLoading(false);
         fetchWords();
         setConfirm(false);
         setConfirmedItemId(null);
       } else {
+        setIsLoading(false);
         console.error(`Failed to delete word with id ${id}.`);
       }
     } catch (error) {
+      setIsLoading(false);
       console.error(`Error deleting word with id ${id}`, error);
+    } finally {
+      // Clear the timer when the fetch operation is complete
+      clearTimeout(timer);
     }
   };
 
+  /**
+   * Initiates the deletion process for a word with the given id.
+   *
+   * @param {number} id - The id of the word to delete.
+   * @returns {void}
+   */
   const handleDelete = (id) => {
     setConfirm(true);
     setConfirmedItemId(id);
   };
 
+  /**
+   * Handles confirming the deletion of a word with the given id.
+   *
+   * @param {number} id - The id of the word to delete.
+   * @returns {void}
+   */
   const handleConfirmDelete = (id) => {
     deleteWord(id);
   };
 
+  /**
+   * Handles canceling the deletion process.
+   *
+   * @returns {void}
+   */
   const handleCancelDelete = () => {
     setConfirm(false);
     setConfirmedItemId(null);
   };
 
+  /**
+   * Renders the InspectWordsPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
   return (
     <>
       <NavigationBar />

@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+/**
+ * React component for editing a word.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the PatchWordPageComponent.
+ */
 const PatchWordPageComponent = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  // State variables
   const [patchWords, setPatchWords] = useState([]);
   const [displayWords, setDisplayWords] = useState([]);
   const [validInput, setValidInput] = useState(true);
@@ -15,10 +23,22 @@ const PatchWordPageComponent = () => {
   const [newTagInput, setNewTagInput] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
 
+  /**
+   * Handles navigation to a specified path.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
   const handleButtonClick = (path) => {
     navigate(path);
   };
 
+  /**
+   * Handles input change for the word being edited.
+   *
+   * @param {Object} event - The input change event.
+   * @returns {void}
+   */
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setPatchWords((prevWords) => {
@@ -28,6 +48,11 @@ const PatchWordPageComponent = () => {
     });
   };
 
+  /**
+   * Fetches word data for the word being edited.
+   *
+   * @returns {void}
+   */
   const fetchWordData = async () => {
     try {
       const response = await fetch(`http://localhost:8080/api/words/${id}`);
@@ -43,6 +68,11 @@ const PatchWordPageComponent = () => {
     }
   };
 
+  /**
+   * Fetches tags for the word being edited.
+   *
+   * @returns {void}
+   */
   const fetchPatchTags = () => {
     const uniqueTags = Array.from(
       new Set(
@@ -54,15 +84,35 @@ const PatchWordPageComponent = () => {
     setPatchWordTags(uniqueTags);
   };
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the data of the word when @param id gets to be known.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchWordData();
   }, [id]);
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the tags for the word with @param id and set the tags of that word as @selectedTags
+   * when ever @param patchWords changes.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchPatchTags();
     setSelectedTags(patchWordTags);
   }, [patchWords]);
 
+  /**
+   * Handles saving the edited word.
+   *
+   * @returns {void}
+   */
   const handleSaveButtonClick = async () => {
     try {
       patchWords[0].category_tags = "";
@@ -90,7 +140,11 @@ const PatchWordPageComponent = () => {
     }
   };
 
-  // FOR TAGS
+  /**
+   * Fetches all words so the old tags can be constructed.
+   *
+   * @returns {void}
+   */
   const fetchWords = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/words/");
@@ -101,6 +155,11 @@ const PatchWordPageComponent = () => {
     }
   };
 
+  /**
+   * Fetches all tags.
+   *
+   * @returns {void}
+   */
   const fetchTags = () => {
     const uniqueOldTags = Array.from(
       new Set(
@@ -113,14 +172,34 @@ const PatchWordPageComponent = () => {
     setTags(allTags);
   };
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the words whenever the @param selectedTags changes.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchWords();
   }, [selectedTags]);
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the tags whenever @param words or @param newTags changes
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchTags();
   }, [words, newTags]);
 
+  /**
+   * Toggles the clicked tag on and off making it selected or unselected
+   *
+   * @param {string} tag - The tag to toggle on and off
+   * @returns {void}
+   */
   const toggleTag = (tag) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
@@ -129,6 +208,13 @@ const PatchWordPageComponent = () => {
     );
   };
 
+  /**
+   * Handles the click event for adding a new tag.
+   * If the tag already exists then it will be marked as selected.
+   * If it doesn't already exist then a new tag will be created and it will be marked as selected
+   *
+   * @returns {void}
+   */
   const handleAddTagClick = () => {
     const newTag = newTagInput.trim();
     if (newTag) {
@@ -154,6 +240,11 @@ const PatchWordPageComponent = () => {
     }
   };
 
+  /**
+   * Renders the PatchWordPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
   return (
     <div className="add-words-page">
       <h1>Edit Word</h1>
@@ -206,8 +297,8 @@ const PatchWordPageComponent = () => {
           <h2>Tags</h2>
 
           <div className="select-tags">
-            <form className="tags-form">
-              <div className="data-vertical-right">
+            <form className="data-vertical">
+              <div className="data-vertical-left">
                 <label className="label-margin">
                   Create new Tags{": "}
                   <input
@@ -217,14 +308,15 @@ const PatchWordPageComponent = () => {
                     onChange={(e) => setNewTagInput(e.target.value)}
                   />
                 </label>
+
+                <button
+                  className="selected-button"
+                  type="button"
+                  onClick={handleAddTagClick}
+                >
+                  Add Tag
+                </button>
               </div>
-              <button
-                className="selected-button"
-                type="button"
-                onClick={handleAddTagClick}
-              >
-                Add Tag
-              </button>
             </form>
             <div className="data-vertical">
               <div className="data-vertical-left">

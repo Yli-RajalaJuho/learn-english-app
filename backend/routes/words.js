@@ -1,9 +1,24 @@
 const database = require("../database/wordsFunctionsDB.js");
 const connections = require("../database/connectionsDB.js");
 const express = require("express");
+
+/**
+ * Express Router for handling word-related routes.
+ *
+ * @type {express.Router}
+ */
 const wordsRouter = express.Router();
 
-// SAVE DATA TO THE DATABASE ->
+/**
+ * Save data to the database.
+ *
+ * @route POST /api/words/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 wordsRouter.post("/", async (req, res) => {
   let connection = undefined;
   try {
@@ -34,7 +49,16 @@ wordsRouter.post("/", async (req, res) => {
   }
 });
 
-// FIND ALL with SORT
+/**
+ * Retrieve all words from the database with optional sorting.
+ *
+ * @route GET /api/words/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 wordsRouter.get("/", async (req, res) => {
   let connection = undefined;
   try {
@@ -69,7 +93,16 @@ wordsRouter.get("/", async (req, res) => {
   }
 });
 
-// FIND BY ID ->
+/**
+ * Retrieve a word by its ID from the database.
+ *
+ * @route GET /api/words/:myId([0-9]+)
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 wordsRouter.get("/:myId([0-9]+)", async (req, res) => {
   let connection = undefined;
   try {
@@ -103,7 +136,16 @@ wordsRouter.get("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-// SEARCH ->
+/**
+ * Search for words in the database with optional sorting and search parameters.
+ *
+ * @route GET /api/words/search
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 wordsRouter.get("/search", async (req, res) => {
   let connection = undefined;
   try {
@@ -147,7 +189,16 @@ wordsRouter.get("/search", async (req, res) => {
   }
 });
 
-// DELETE ALL ->
+/**
+ * Delete all words from the database.
+ *
+ * @route DELETE /api/words/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 wordsRouter.delete("/", async (req, res) => {
   let connection = undefined;
   try {
@@ -173,7 +224,16 @@ wordsRouter.delete("/", async (req, res) => {
   }
 });
 
-// DELETE BY ID ->
+/**
+ * Delete a word by its ID from the database.
+ *
+ * @route DELETE /api/words/:myId([0-9]+)
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 wordsRouter.delete("/:myId([0-9]+)", async (req, res) => {
   let connection = undefined;
   try {
@@ -207,7 +267,16 @@ wordsRouter.delete("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-// PUT ->
+/**
+ * Update a word by its ID in the database.
+ *
+ * @route PUT /api/words/:myId([0-9]+)
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 wordsRouter.put("/:myId([0-9]+)", async (req, res) => {
   let connection = undefined;
   try {
@@ -244,7 +313,16 @@ wordsRouter.put("/:myId([0-9]+)", async (req, res) => {
   }
 });
 
-// PATCH ->
+/**
+ * Patch a word by its ID in the database.
+ *
+ * @route PATCH /api/words/:myId([0-9]+)
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise<void>} A Promise that resolves once the operation is complete.
+ */
 wordsRouter.patch("/:myId([0-9]+)", async (req, res) => {
   let connection = undefined;
   try {

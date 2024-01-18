@@ -4,8 +4,16 @@ import { useNavigate } from "react-router-dom";
 import DownArrow from ".././assets/downArrow.png";
 import upArrow from ".././assets/upArrow.png";
 
-const MainPageComponent = () => {
+/**
+ * React component for displaying the scoreboard and managing scores.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the ScoreBoardPageComponent.
+ */
+const ScoreBoardPageComponent = () => {
   const navigate = useNavigate();
+
+  // State variables
   const [scores, setScores] = useState([]);
   const [sortOrder, setSortOrder] = useState("desc");
   const [searchInput, setSearchInput] = useState("");
@@ -14,7 +22,11 @@ const MainPageComponent = () => {
   const [noData, setNoData] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch scores from the server when the component mounts
+  /**
+   * Fetches scores from the server based on search and sort parameters.
+   *
+   * @returns {void}
+   */
   const fetchScores = async () => {
     // Set a timer to set isLoading to true after 2 seconds
     const timer = setTimeout(() => {
@@ -43,23 +55,52 @@ const MainPageComponent = () => {
     }
   };
 
-  // Transition to different page
+  /**
+   * Handles transition to a different page.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
   const handleButtonClick = (path) => {
     navigate(path);
   };
 
+  /**
+   * Handles changing the sort order of the scoreboard.
+   *
+   * @param {string} order - The sort order ("asc" or "desc").
+   * @returns {void}
+   */
   const handleSortOrder = (order) => {
     setSortOrder(order);
   };
 
+  /**
+   * Handles searching for scores based on input.
+   *
+   * @param {string} search - The search input ("id, score, date").
+   * @returns {void}
+   */
   const handleSearch = (search) => {
     setSearchInput(search);
   };
 
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the scores whenever @param searchInput or @param sortOrder changes.
+   *
+   * @effect
+   * @returns {void}
+   */
   useEffect(() => {
     fetchScores();
   }, [searchInput, sortOrder]);
 
+  /**
+   * Deletes all scores from the server.
+   *
+   * @returns {void}
+   */
   const deleteAllScores = async () => {
     try {
       const response = await fetch(`http://localhost:8080/api/scores/`, {
@@ -79,18 +120,39 @@ const MainPageComponent = () => {
     }
   };
 
+  /**
+   * Handles initiating the confirmation to delete all scores.
+   *
+   * @returns {void}
+   */
   const handleDelete = () => {
     setConfirm(true);
   };
 
+  /**
+   * Handles confirming the deletion of all scores.
+   *
+   * @returns {void}
+   */
   const handleConfirmDelete = () => {
     deleteAllScores();
   };
 
+  /**
+   * Handles canceling the deletion of all scores.
+   *
+   * @returns {void}
+   */
   const handleCancelDelete = () => {
     setConfirm(false);
   };
 
+  /**
+   * Determines the color class based on the score value.
+   *
+   * @param {string} score - The score value.
+   * @returns {string} - The color class.
+   */
   const handleScoreColor = (score) => {
     const [numerator, denominator] = score.split("/");
     const numericScore = parseFloat(numerator) / parseFloat(denominator);
@@ -104,6 +166,11 @@ const MainPageComponent = () => {
     }
   };
 
+  /**
+   * Renders the MainPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
   return (
     <>
       <NavigationBar />
@@ -140,7 +207,7 @@ const MainPageComponent = () => {
               <label className="label-margin">
                 Search{": "}
                 <input
-                  type="number"
+                  type="text"
                   value={searchInput}
                   onChange={(e) => handleSearch(e.target.value)}
                   placeholder="Search..."
@@ -256,4 +323,4 @@ const MainPageComponent = () => {
   );
 };
 
-export default MainPageComponent;
+export default ScoreBoardPageComponent;
