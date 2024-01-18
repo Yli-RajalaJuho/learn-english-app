@@ -186,7 +186,7 @@ const ScoreBoardPageComponent = () => {
         </div>
 
         {confirm ? (
-          <div className="left-center">
+          <div className="data-vertical">
             <div>
               <p>Delete all Scores?</p>
             </div>
@@ -277,6 +277,8 @@ const ScoreBoardPageComponent = () => {
                     <label className="label-margin">
                       <span className="score-id">Test: {score.id}</span>
                     </label>
+                  </div>
+                  <div className="data-vertical-left">
                     <label className="label-margin">
                       <span className="score-date">Date: {score.date}</span>
                     </label>

@@ -24,6 +24,17 @@ const PatchWordPageComponent = () => {
   const [selectedTags, setSelectedTags] = useState([]);
 
   /**
+   * Effect hook that runs after every render.
+   * Set @param validInput to true whenever @param selectedTags or @param patchWords changes
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    setValidInput(true);
+  }, [selectedTags, patchWords]);
+
+  /**
    * Handles navigation to a specified path.
    *
    * @param {string} path - The path to navigate to.
@@ -216,6 +227,15 @@ const PatchWordPageComponent = () => {
   };
 
   /**
+   * Handles unselecting all tags.
+   *
+   * @returns {void}
+   */
+  const handleUnselectAll = () => {
+    setSelectedTags([]);
+  };
+
+  /**
    * Handles the click event for adding a new tag.
    * If the tag already exists then it will be marked as selected.
    * If it doesn't already exist then a new tag will be created and it will be marked as selected
@@ -267,16 +287,11 @@ const PatchWordPageComponent = () => {
           </li>
         ))}
       </ul>
-      {!validInput && (
-        <p className="error-msg">
-          Tags, English and Finnish words cannot be empty!
-        </p>
-      )}
       {patchWords.length !== 0 && (
         <>
           <div className="select-tags">
             <form className="tags-form">
-              <div className="data-vertical-right">
+              <div className="data-vertical-left">
                 <label className="label-margin">
                   English Word{": "}
                   <input
@@ -340,9 +355,22 @@ const PatchWordPageComponent = () => {
                     {tag}
                   </button>
                 ))}
+                <button
+                  className="unselect"
+                  onClick={() => handleUnselectAll()}
+                >
+                  unselect-all
+                </button>
               </div>
             </div>
           </div>
+          {validInput === false ? (
+            <div className="data-vertical">
+              <label className="error-msg">
+                Tags, English and Finnish words cannot be empty!
+              </label>
+            </div>
+          ) : null}
           <div className="confirm-cancel">
             <button
               className="start-test"

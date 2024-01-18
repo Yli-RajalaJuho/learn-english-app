@@ -127,6 +127,34 @@ p {
   transition: border-color 0.25s;
 }
 
+.smaller-button {
+  position: relative;
+  margin: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.25em 1em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #747474;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+.selected-smaller-button {
+  position: relative;
+  margin: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #7c85ff;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
 .selected-img-button {
   position: relative;
   margin: 10px;
@@ -281,6 +309,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .label-margin {

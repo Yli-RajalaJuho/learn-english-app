@@ -153,6 +153,26 @@ const AddWordsPageComponent = () => {
   };
 
   /**
+   * Effect hook that runs after every render.
+   * Set @param validInput to true whenever @param selectedTags or @param newWord changes
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    setValidInput(true);
+  }, [selectedTags, newWord]);
+
+  /**
+   * Handles unselecting all tags.
+   *
+   * @returns {void}
+   */
+  const handleUnselectAll = () => {
+    setSelectedTags([]);
+  };
+
+  /**
    * Handles the click event for saving the word to the database and then navigating out of the page
    *
    * @async
@@ -201,15 +221,10 @@ const AddWordsPageComponent = () => {
     <>
       <div className="add-words-page">
         <h1>Add New Word</h1>
-        {validInput === false ? (
-          <p className="error-msg">
-            Tags, English and Finnish words cannot be empty!
-          </p>
-        ) : null}
 
         <div className="select-tags">
           <form className="tags-form">
-            <div className="data-vertical-right">
+            <div className="data-vertical-left">
               <label className="label-margin">
                 New English Word:{" "}
                 <input
@@ -220,7 +235,7 @@ const AddWordsPageComponent = () => {
                 />
               </label>
             </div>
-            <div className="data-vertical-right">
+            <div className="data-vertical-left">
               <label className="label-margin">
                 New Finnish Word:{" "}
                 <input
@@ -271,9 +286,20 @@ const AddWordsPageComponent = () => {
                   {tag}
                 </button>
               ))}
+              <button className="unselect" onClick={() => handleUnselectAll()}>
+                unselect-all
+              </button>
             </div>
           </div>
         </div>
+        {validInput === false ? (
+          <div className="data-vertical">
+            <label className="error-msg">
+              Tags, English and Finnish words cannot be empty!
+            </label>
+          </div>
+        ) : null}
+
         <div className="confirm-cancel">
           <button
             className="start-test"

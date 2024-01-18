@@ -256,7 +256,9 @@ const InspectWordsPageComponent = () => {
               <button
                 onClick={() => handleSortable("id")}
                 className={
-                  sortable === "id" ? "selected-button" : "small-button"
+                  sortable === "id"
+                    ? "selected-smaller-button"
+                    : "smaller-button"
                 }
               >
                 Id
@@ -264,7 +266,9 @@ const InspectWordsPageComponent = () => {
               <button
                 onClick={() => handleSortable("eng")}
                 className={
-                  sortable === "eng" ? "selected-button" : "small-button"
+                  sortable === "eng"
+                    ? "selected-smaller-button"
+                    : "smaller-button"
                 }
               >
                 Eng
@@ -272,7 +276,9 @@ const InspectWordsPageComponent = () => {
               <button
                 onClick={() => handleSortable("fin")}
                 className={
-                  sortable === "fin" ? "selected-button" : "small-button"
+                  sortable === "fin"
+                    ? "selected-smaller-button"
+                    : "smaller-button"
                 }
               >
                 Fin
@@ -280,7 +286,9 @@ const InspectWordsPageComponent = () => {
               <button
                 onClick={() => handleSortable("tags")}
                 className={
-                  sortable === "tags" ? "selected-button" : "small-button"
+                  sortable === "tags"
+                    ? "selected-smaller-button"
+                    : "smaller-button"
                 }
               >
                 Tags
@@ -341,9 +349,12 @@ const InspectWordsPageComponent = () => {
                         <span className="finnish-word">
                           {word.finnish_word}
                         </span>
-                        <span className="word-id">
-                          Tags: {word.category_tags}
-                        </span>
+                      </div>
+                      <div className="data-vertical-left">
+                        <label className="label-margin">
+                          Tags:
+                          <span className="word-id">{word.category_tags}</span>
+                        </label>
                       </div>
 
                       <div className="data-vertical-right">

@@ -202,12 +202,7 @@ const FirstPageComponent = () => {
     <>
       <NavigationBar />
       <h1>Test Setup</h1>
-      {validWordsNum === false ? (
-        <p className="error-msg">
-          Please set the number of words on the test to higher than 0 and{" "}
-          {possibleWordsCount} at max!
-        </p>
-      ) : null}
+
       <div className="test-init-form">
         <div className="select-tags">
           <p>Select words based on tags</p>
@@ -230,6 +225,15 @@ const FirstPageComponent = () => {
             unselect-all
           </button>
         </div>
+
+        <div className="data-vertical-left">
+          {validWordsNum === false ? (
+            <label className="error-msg">
+              Please enter a number between 0-{possibleWordsCount}!
+            </label>
+          ) : null}
+        </div>
+
         <div className="select-tags">
           <p>Number of Words on the Test{": "}</p>
           <div className="test-words">
