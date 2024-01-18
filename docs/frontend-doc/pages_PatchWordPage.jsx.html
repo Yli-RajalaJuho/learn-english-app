@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/PatchWordPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/PatchWordPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+/**
+ * React component for editing a word.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the PatchWordPageComponent.
+ */
+const PatchWordPageComponent = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  // State variables
+  const [patchWords, setPatchWords] = useState([]);
+  const [displayWords, setDisplayWords] = useState([]);
+  const [validInput, setValidInput] = useState(true);
+
+  const [words, setWords] = useState([]);
+  const [patchWordTags, setPatchWordTags] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [newTags, setNewTags] = useState([]);
+  const [newTagInput, setNewTagInput] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  /**
+   * Handles navigation to a specified path.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
+  const handleButtonClick = (path) => {
+    navigate(path);
+  };
+
+  /**
+   * Handles input change for the word being edited.
+   *
+   * @param {Object} event - The input change event.
+   * @returns {void}
+   */
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setPatchWords((prevWords) => {
+      return prevWords.map((word) => {
+        return { ...word, [name]: value };
+      });
+    });
+  };
+
+  /**
+   * Fetches word data for the word being edited.
+   *
+   * @returns {void}
+   */
+  const fetchWordData = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/words/${id}`);
+      if (response.ok) {
+        const wordData = await response.json();
+        setDisplayWords(wordData);
+        setPatchWords(wordData);
+      } else {
+        console.error("Failed to fetch word data:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching word data:", error);
+    }
+  };
+
+  /**
+   * Fetches tags for the word being edited.
+   *
+   * @returns {void}
+   */
+  const fetchPatchTags = () => {
+    const uniqueTags = Array.from(
+      new Set(
+        patchWords.flatMap((word) =>
+          word.category_tags.split(",").map((tag) => tag.trim())
+        )
+      )
+    );
+    setPatchWordTags(uniqueTags);
+  };
+
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the data of the word when @param id gets to be known.
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    fetchWordData();
+  }, [id]);
+
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the tags for the word with @param id and set the tags of that word as @selectedTags
+   * when ever @param patchWords changes.
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    fetchPatchTags();
+    setSelectedTags(patchWordTags);
+  }, [patchWords]);
+
+  /**
+   * Handles saving the edited word.
+   *
+   * @returns {void}
+   */
+  const handleSaveButtonClick = async () => {
+    try {
+      patchWords[0].category_tags = "";
+      const response = await fetch(`http://localhost:8080/api/words/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...patchWords[0],
+          category_tags: selectedTags.join(", "),
+        }),
+      });
+
+      if (response.ok) {
+        // After successfully updating, navigate back to inspect-words
+        setValidInput(true);
+        navigate("/inspect-words");
+      } else {
+        setValidInput(false);
+        console.error("Failed to save word:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error saving word:", error);
+    }
+  };
+
+  /**
+   * Fetches all words so the old tags can be constructed.
+   *
+   * @returns {void}
+   */
+  const fetchWords = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/words/");
+      const result = await response.json();
+      setWords(result);
+    } catch (error) {
+      console.error("Error fetching words:", error);
+    }
+  };
+
+  /**
+   * Fetches all tags.
+   *
+   * @returns {void}
+   */
+  const fetchTags = () => {
+    const uniqueOldTags = Array.from(
+      new Set(
+        words.flatMap((word) =>
+          word.category_tags.split(",").map((tag) => tag.trim())
+        )
+      )
+    );
+    const allTags = [...uniqueOldTags, ...newTags];
+    setTags(allTags);
+  };
+
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the words whenever the @param selectedTags changes.
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    fetchWords();
+  }, [selectedTags]);
+
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the tags whenever @param words or @param newTags changes
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    fetchTags();
+  }, [words, newTags]);
+
+  /**
+   * Toggles the clicked tag on and off making it selected or unselected
+   *
+   * @param {string} tag - The tag to toggle on and off
+   * @returns {void}
+   */
+  const toggleTag = (tag) => {
+    setSelectedTags((prevTags) =>
+      prevTags.includes(tag)
+        ? prevTags.filter((selectedTag) => selectedTag !== tag)
+        : [...prevTags, tag]
+    );
+  };
+
+  /**
+   * Handles the click event for adding a new tag.
+   * If the tag already exists then it will be marked as selected.
+   * If it doesn't already exist then a new tag will be created and it will be marked as selected
+   *
+   * @returns {void}
+   */
+  const handleAddTagClick = () => {
+    const newTag = newTagInput.trim();
+    if (newTag) {
+      if (!tags.includes(newTag)) {
+        // Add the new tag to both tags and newTags arrays
+        setTags((prevTags) => [...prevTags, newTag]);
+        setNewTags((prevNewTags) => [...prevNewTags, newTag]);
+
+        // Add the new tag to the selected tags array
+        setSelectedTags((prevTags) => [...prevTags, newTag]);
+
+        // Clear the input field
+        setNewTagInput("");
+      } else {
+        // Handle case where the tag already exists
+        setSelectedTags((prevTags) =>
+          prevTags.includes(newTag) ? prevTags : [...prevTags, newTag]
+        );
+
+        // Clear the input field
+        setNewTagInput("");
+      }
+    }
+  };
+
+  /**
+   * Renders the PatchWordPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
+  return (
+    &lt;div className="add-words-page">
+      &lt;h1>Edit Word&lt;/h1>
+      &lt;ul className="basic-list">
+        {displayWords.map((word) => (
+          &lt;li key={word.id} className="list-item">
+            &lt;div>
+              &lt;span className="word-id">ID: {word.id}&lt;/span>
+              &lt;span className="english-word">{word.english_word}&lt;/span>
+              &lt;span className="finnish-word">{word.finnish_word}&lt;/span>
+              &lt;span className="word-id">Tags: {word.category_tags}&lt;/span>
+            &lt;/div>
+          &lt;/li>
+        ))}
+      &lt;/ul>
+      {!validInput &amp;&amp; (
+        &lt;p className="error-msg">
+          Tags, English and Finnish words cannot be empty!
+        &lt;/p>
+      )}
+      {patchWords.length !== 0 &amp;&amp; (
+        &lt;>
+          &lt;div className="select-tags">
+            &lt;form className="tags-form">
+              &lt;div className="data-vertical-right">
+                &lt;label className="label-margin">
+                  English Word{": "}
+                  &lt;input
+                    type="text"
+                    name="english_word"
+                    value={patchWords[0].english_word}
+                    onChange={handleInputChange}
+                  />
+                &lt;/label>
+              &lt;/div>
+              &lt;div className="data-vertical-right">
+                &lt;label className="label-margin">
+                  Finnish Word{": "}
+                  &lt;input
+                    type="text"
+                    name="finnish_word"
+                    value={patchWords[0].finnish_word}
+                    onChange={handleInputChange}
+                  />
+                &lt;/label>
+              &lt;/div>
+            &lt;/form>
+          &lt;/div>
+
+          &lt;h2>Tags&lt;/h2>
+
+          &lt;div className="select-tags">
+            &lt;form className="data-vertical">
+              &lt;div className="data-vertical-left">
+                &lt;label className="label-margin">
+                  Create new Tags{": "}
+                  &lt;input
+                    type="text"
+                    name="category_tags"
+                    value={newTagInput}
+                    onChange={(e) => setNewTagInput(e.target.value)}
+                  />
+                &lt;/label>
+
+                &lt;button
+                  className="selected-button"
+                  type="button"
+                  onClick={handleAddTagClick}
+                >
+                  Add Tag
+                &lt;/button>
+              &lt;/div>
+            &lt;/form>
+            &lt;div className="data-vertical">
+              &lt;div className="data-vertical-left">
+                {tags.map((tag) => (
+                  &lt;button
+                    key={tag}
+                    onClick={() => toggleTag(tag)}
+                    className={
+                      selectedTags.includes(tag)
+                        ? "selected-button"
+                        : "small-button"
+                    }
+                  >
+                    {tag}
+                  &lt;/button>
+                ))}
+              &lt;/div>
+            &lt;/div>
+          &lt;/div>
+          &lt;div className="confirm-cancel">
+            &lt;button
+              className="start-test"
+              type="button"
+              onClick={handleSaveButtonClick}
+            >
+              Confirm
+            &lt;/button>
+            &lt;button
+              className="cancel-button"
+              onClick={() => handleButtonClick("/inspect-words")}
+            >
+              Cancel
+            &lt;/button>
+          &lt;/div>
+        &lt;/>
+      )}
+    &lt;/div>
+  );
+};
+
+export default PatchWordPageComponent;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddWordsPageComponent">AddWordsPageComponent</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#FirstPageComponent">FirstPageComponent</a></li><li><a href="global.html#InspectWordsPageComponent">InspectWordsPageComponent</a></li><li><a href="global.html#MainPageComponent">MainPageComponent</a></li><li><a href="global.html#NavigationBar">NavigationBar</a></li><li><a href="global.html#PatchWordPageComponent">PatchWordPageComponent</a></li><li><a href="global.html#ResultsPageComponent">ResultsPageComponent</a></li><li><a href="global.html#ScoreBoardPageComponent">ScoreBoardPageComponent</a></li><li><a href="global.html#TestPageComponent">TestPageComponent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 16:06:21 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

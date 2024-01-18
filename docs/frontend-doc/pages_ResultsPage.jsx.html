@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/ResultsPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/ResultsPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import NavigationBar from "./NavigationBar";
+import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+/**
+ * React component for displaying test results.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the ResultsPageComponent.
+ */
+const ResultsPageComponent = () => {
+  const location = useLocation();
+  const { userResponses } = location.state || {};
+
+  // State variables
+  const [newScore, setNewScore] = useState({
+    score: "",
+    correct_words: "",
+    incorrect_words: "",
+    date: "",
+  });
+  const [grade, setGrade] = useState("");
+
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the data of the word when @param userResponses gets to be known.
+   * Calculates and updates the score, correct words, incorrect words, and date for @param newScore.
+   *
+   * @returns {void}
+   */
+  useEffect(() => {
+    // Calculate score, correct words, and incorrect words
+    const correctAnswers = userResponses.filter(
+      (response) => response.isCorrect
+    );
+    const incorrectAnswers = userResponses.filter(
+      (response) => !response.isCorrect
+    );
+
+    const score = `${correctAnswers.length}/${userResponses.length}`;
+
+    const currentDate = new Date();
+    const date = currentDate.toLocaleDateString();
+
+    const correctWords = correctAnswers
+      .map((response) => response.question)
+      .join(",");
+    const incorrectWords = incorrectAnswers
+      .map((response) => response.question)
+      .join(",");
+
+    setNewScore({
+      score,
+      correct_words: correctWords,
+      incorrect_words: incorrectWords,
+      date,
+    });
+
+    let calculatedGrade = "";
+    const avg = userResponses.length * 0.25;
+    if (correctAnswers.length &lt; avg) {
+      calculatedGrade = "bad";
+    } else if (
+      correctAnswers.length >= avg &amp;&amp;
+      correctAnswers.length &lt; userResponses.length
+    ) {
+      calculatedGrade = "mediocre";
+    } else if (correctAnswers.length == userResponses.length) {
+      calculatedGrade = "great";
+    }
+
+    setGrade(calculatedGrade);
+  }, [userResponses]);
+
+  /**
+   * Effect hook that runs after every render.
+   * Handles saving the test result to the server instantly after @param newScore is completely ready.
+   *
+   * @returns {void}
+   */
+  useEffect(() => {
+    const handleSave = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/api/scores/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newScore),
+        });
+
+        if (response.ok) {
+          console.log("Test result saved successfully!");
+        } else {
+          console.error("Failed to save test result:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error saving test result:", error);
+      }
+    };
+
+    // Save the result when newScore changes
+    handleSave();
+  }, [newScore]);
+
+  /**
+   * Renders the ResultsPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
+  return (
+    &lt;>
+      &lt;NavigationBar />
+      &lt;h1>Results&lt;/h1>
+      &lt;div className={`${grade}`}>
+        &lt;h3>Your got {newScore.score} words right!!!&lt;/h3>
+      &lt;/div>
+
+      &lt;ul>
+        {userResponses.map((response, index) => (
+          &lt;li key={index}>
+            &lt;div className="list-item">
+              &lt;div className="data-vertical">
+                &lt;label className="label-margin">
+                  Test Word:{" "}
+                  &lt;span className="english-word">{response.question}&lt;/span>
+                &lt;/label>
+
+                &lt;label className="label-margin">
+                  Your Answer:{" "}
+                  &lt;span className="user-answer">
+                    {response.userAnswer.length === 0
+                      ? "empty"
+                      : response.userAnswer}
+                  &lt;/span>
+                &lt;/label>
+
+                &lt;div>
+                  &lt;label className="label-margin">
+                    &lt;span
+                      className={response.isCorrect ? "correct" : "incorrect"}
+                    >
+                      {response.isCorrect ? " (Correct)" : " (Incorrect)"}
+                    &lt;/span>
+                  &lt;/label>
+
+                  &lt;>
+                    {response.isCorrect ? null : (
+                      &lt;label className="label-margin">
+                        &lt;span className="correct">
+                          Correct answer{": "}
+                          {response.correctAnswer}
+                        &lt;/span>
+                      &lt;/label>
+                    )}
+                  &lt;/>
+                &lt;/div>
+              &lt;/div>
+            &lt;/div>
+          &lt;/li>
+        ))}
+      &lt;/ul>
+    &lt;/>
+  );
+};
+
+export default ResultsPageComponent;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddWordsPageComponent">AddWordsPageComponent</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#FirstPageComponent">FirstPageComponent</a></li><li><a href="global.html#InspectWordsPageComponent">InspectWordsPageComponent</a></li><li><a href="global.html#MainPageComponent">MainPageComponent</a></li><li><a href="global.html#NavigationBar">NavigationBar</a></li><li><a href="global.html#PatchWordPageComponent">PatchWordPageComponent</a></li><li><a href="global.html#ResultsPageComponent">ResultsPageComponent</a></li><li><a href="global.html#ScoreBoardPageComponent">ScoreBoardPageComponent</a></li><li><a href="global.html#TestPageComponent">TestPageComponent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 16:06:21 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

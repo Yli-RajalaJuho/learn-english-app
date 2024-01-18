@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/TestPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/TestPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import NavigationBar from "./NavigationBar";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+/**
+ * React component for conducting a language test based on selected words and language.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the TestPageComponent.
+ */
+const TestPageComponent = () => {
+  const navigate = useNavigate();
+  const { wordsNum, lang, tags } = useParams();
+
+  // State variables
+  const [words, setWords] = useState([]);
+  const [randomWords, setRandomWords] = useState([]);
+  const [userInputs, setUserInputs] = useState(
+    Array.from({ length: wordsNum }, () => "")
+  );
+
+  /**
+   * Handles the submission of user answers, calculates correctness,
+   * and navigates to the results page with the users submissions.
+   *
+   * @returns {void}
+   */
+  const handleButtonClick = () => {
+    const userResponses = userInputs.map((input, index) => {
+      const correctAnswer =
+        lang === "fin"
+          ? randomWords[index].english_word
+          : randomWords[index].finnish_word;
+      const question =
+        lang === "fin"
+          ? randomWords[index].finnish_word
+          : randomWords[index].english_word;
+      return {
+        question: question,
+        correctAnswer: correctAnswer,
+        userAnswer: input,
+        isCorrect:
+          input.trim().toLowerCase() === correctAnswer.trim().toLowerCase(),
+      };
+    });
+
+    // Navigate to the next page with the results
+    navigate(`/results-page`, { state: { userResponses } });
+  };
+
+  /**
+   * Handles transitioning to a different page.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
+  const handleTransition = (path) => {
+    navigate(path);
+  };
+
+  /**
+   * Handles updating user input on input change.
+   *
+   * @param {number} index - The index of the input field.
+   * @param {React.ChangeEvent&lt;HTMLInputElement>} event - The input change event.
+   * @returns {void}
+   */
+  const handleInputChange = (index, event) => {
+    const { value } = event.target;
+    setUserInputs((prevInputs) => {
+      const newInputs = [...prevInputs];
+      newInputs[index] = value;
+      return newInputs;
+    });
+  };
+
+  /**
+   * Fetches words based on selected tags from the server.
+   *
+   * @returns {void}
+   */
+  const fetchWords = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/words/");
+      const result = await response.json();
+
+      // Check if tags include "all" and include all words
+      const filteredWords = tags.includes("all")
+        ? result
+        : result.filter((word) =>
+            word.category_tags
+              .split(",")
+              .some((tag) => tags.includes(tag.trim()))
+          );
+
+      setWords(filteredWords);
+    } catch (error) {
+      console.error("Error fetching words:", error);
+    }
+  };
+
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the words whenever the @param tags changes.
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    fetchWords();
+  }, [tags]);
+
+  /**
+   * Effect hook that runs after every render.
+   * Generate random words from words whenever the @param words or @param wordsNum changes.
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    const getRandomWords = () => {
+      const shuffledWords = [...words].sort(() => 0.5 - Math.random());
+      const selectedWords = shuffledWords.slice(0, wordsNum);
+      setRandomWords(selectedWords);
+    };
+
+    getRandomWords();
+  }, [words, wordsNum]);
+
+  /**
+   * Renders the TestPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
+  return (
+    &lt;>
+      &lt;NavigationBar />
+      &lt;h1>Test Your Knowledge&lt;/h1>
+      &lt;ul className="basic-list">
+        {randomWords.map((word, index) => (
+          &lt;li key={word.id} className="list-item">
+            {lang === "fin" ? (
+              &lt;div className="data-vertical">
+                &lt;div className="data-vertical-left">
+                  &lt;span className="question-word">{word.finnish_word}&lt;/span>
+                &lt;/div>
+
+                &lt;div className="data-vertical-right">
+                  &lt;span className="question-word">
+                    &lt;label className="label-margin">
+                      &lt;input
+                        className="padding"
+                        type="text"
+                        value={userInputs[index]}
+                        onChange={(event) => handleInputChange(index, event)}
+                      />
+                    &lt;/label>
+                  &lt;/span>
+                &lt;/div>
+              &lt;/div>
+            ) : (
+              &lt;div className="data-vertical">
+                &lt;div className="data-vertical-left">
+                  &lt;span className="question-word">{word.english_word}&lt;/span>
+                &lt;/div>
+
+                &lt;div className="data-vertical-right">
+                  &lt;span className="question-word">
+                    &lt;label>
+                      &lt;input
+                        type="text"
+                        value={userInputs[index]}
+                        onChange={(event) => handleInputChange(index, event)}
+                      />
+                    &lt;/label>
+                  &lt;/span>
+                &lt;/div>
+              &lt;/div>
+            )}
+          &lt;/li>
+        ))}
+      &lt;/ul>
+      &lt;div className="center">
+        &lt;button className="selected-button" onClick={() => handleButtonClick()}>
+          Submit Answers
+        &lt;/button>
+        &lt;button onClick={() => handleTransition("/first-page")}>back&lt;/button>
+      &lt;/div>
+    &lt;/>
+  );
+};
+
+export default TestPageComponent;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddWordsPageComponent">AddWordsPageComponent</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#FirstPageComponent">FirstPageComponent</a></li><li><a href="global.html#InspectWordsPageComponent">InspectWordsPageComponent</a></li><li><a href="global.html#MainPageComponent">MainPageComponent</a></li><li><a href="global.html#NavigationBar">NavigationBar</a></li><li><a href="global.html#PatchWordPageComponent">PatchWordPageComponent</a></li><li><a href="global.html#ResultsPageComponent">ResultsPageComponent</a></li><li><a href="global.html#ScoreBoardPageComponent">ScoreBoardPageComponent</a></li><li><a href="global.html#TestPageComponent">TestPageComponent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 16:06:21 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

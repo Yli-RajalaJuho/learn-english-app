@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: pages/ScoreboardPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: pages/ScoreboardPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import NavigationBar from "./NavigationBar";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import DownArrow from ".././assets/downArrow.png";
+import upArrow from ".././assets/upArrow.png";
+
+/**
+ * React component for displaying the scoreboard and managing scores.
+ *
+ * @component
+ * @returns {JSX.Element} JSX element representing the ScoreBoardPageComponent.
+ */
+const ScoreBoardPageComponent = () => {
+  const navigate = useNavigate();
+
+  // State variables
+  const [scores, setScores] = useState([]);
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [searchInput, setSearchInput] = useState("");
+  const [confirm, setConfirm] = useState(false);
+
+  const [noData, setNoData] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  /**
+   * Fetches scores from the server based on search and sort parameters.
+   *
+   * @returns {void}
+   */
+  const fetchScores = async () => {
+    // Set a timer to set isLoading to true after 2 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(true);
+    }, 2000);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/scores/?searchTerm=${searchInput}&amp;sortOrder=${sortOrder}`
+      );
+      const result = await response.json();
+
+      if (response.ok) {
+        setIsLoading(false);
+        setNoData(false);
+        setScores(result);
+      }
+    } catch (error) {
+      setScores([]);
+      setIsLoading(false);
+      setNoData(true);
+      console.error("Error fetching scores:", error);
+    } finally {
+      // Clear the timer when the fetch operation is complete
+      clearTimeout(timer);
+    }
+  };
+
+  /**
+   * Handles transition to a different page.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
+  const handleButtonClick = (path) => {
+    navigate(path);
+  };
+
+  /**
+   * Handles changing the sort order of the scoreboard.
+   *
+   * @param {string} order - The sort order ("asc" or "desc").
+   * @returns {void}
+   */
+  const handleSortOrder = (order) => {
+    setSortOrder(order);
+  };
+
+  /**
+   * Handles searching for scores based on input.
+   *
+   * @param {string} search - The search input ("id, score, date").
+   * @returns {void}
+   */
+  const handleSearch = (search) => {
+    setSearchInput(search);
+  };
+
+  /**
+   * Effect hook that runs after every render.
+   * Fetch all the scores whenever @param searchInput or @param sortOrder changes.
+   *
+   * @effect
+   * @returns {void}
+   */
+  useEffect(() => {
+    fetchScores();
+  }, [searchInput, sortOrder]);
+
+  /**
+   * Deletes all scores from the server.
+   *
+   * @returns {void}
+   */
+  const deleteAllScores = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/api/scores/`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        // If the response is successful, update the list of scores
+        setScores([]);
+        fetchScores();
+        setConfirm(false);
+      } else {
+        console.error(`Failed to delete scores.`);
+      }
+    } catch (error) {
+      console.error(`Error deleting scores`, error);
+    }
+  };
+
+  /**
+   * Handles initiating the confirmation to delete all scores.
+   *
+   * @returns {void}
+   */
+  const handleDelete = () => {
+    setConfirm(true);
+  };
+
+  /**
+   * Handles confirming the deletion of all scores.
+   *
+   * @returns {void}
+   */
+  const handleConfirmDelete = () => {
+    deleteAllScores();
+  };
+
+  /**
+   * Handles canceling the deletion of all scores.
+   *
+   * @returns {void}
+   */
+  const handleCancelDelete = () => {
+    setConfirm(false);
+  };
+
+  /**
+   * Determines the color class based on the score value.
+   *
+   * @param {string} score - The score value.
+   * @returns {string} - The color class.
+   */
+  const handleScoreColor = (score) => {
+    const [numerator, denominator] = score.split("/");
+    const numericScore = parseFloat(numerator) / parseFloat(denominator);
+
+    if (numericScore &lt; 0.25) {
+      return "score-color-bad";
+    } else if (numericScore >= 0.25 &amp;&amp; numericScore &lt; 1) {
+      return "score-color-mediocre";
+    } else if (numericScore == 1) {
+      return "score-color-great";
+    }
+  };
+
+  /**
+   * Renders the MainPageComponent.
+   *
+   * @returns {JSX.Element} JSX element.
+   */
+  return (
+    &lt;>
+      &lt;NavigationBar />
+      &lt;h1>Scoreboard&lt;/h1>
+      &lt;div className="left-center">
+        &lt;div className="left-center">
+          &lt;button onClick={() => handleButtonClick("/")}>back&lt;/button>
+        &lt;/div>
+
+        {confirm ? (
+          &lt;div className="left-center">
+            &lt;div>
+              &lt;p>Delete all Scores?&lt;/p>
+            &lt;/div>
+
+            &lt;button className="unselect" onClick={handleConfirmDelete}>
+              confirm
+            &lt;/button>
+            &lt;button onClick={handleCancelDelete}>cancel&lt;/button>
+          &lt;/div>
+        ) : (
+          &lt;div className="left-center">
+            &lt;button className="unselect" onClick={handleDelete}>
+              Delete Scores
+            &lt;/button>
+          &lt;/div>
+        )}
+      &lt;/div>
+
+      &lt;div className="sort-container">
+        &lt;div className="selected-buttons">
+          &lt;div className="data-vertical-right">
+            &lt;div className="searchbar">
+              &lt;label className="label-margin">
+                Search{": "}
+                &lt;input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Search..."
+                />
+              &lt;/label>
+            &lt;/div>
+          &lt;/div>
+
+          &lt;div className="data-vertical-right">
+            &lt;button
+              onClick={() => handleSortOrder("asc")}
+              className={
+                sortOrder === "asc" ? "selected-img-button" : "img-button"
+              }
+            >
+              &lt;img
+                className="button-image"
+                src={DownArrow}
+                alt="ascending-order"
+              >&lt;/img>
+            &lt;/button>
+            &lt;button
+              onClick={() => handleSortOrder("desc")}
+              className={
+                sortOrder === "desc" ? "selected-img-button" : "img-button"
+              }
+            >
+              &lt;img
+                className="button-image"
+                src={upArrow}
+                alt="descending-order"
+              >&lt;/img>
+            &lt;/button>
+          &lt;/div>
+        &lt;/div>
+      &lt;/div>
+
+      &lt;>
+        {isLoading ? (
+          &lt;div className="list-item">
+            &lt;p className="center">loading...&lt;/p>
+          &lt;/div>
+        ) : null}
+        {noData ? (
+          &lt;>
+            &lt;div className="list-item">
+              &lt;p className="center">No Search Results available&lt;/p>
+            &lt;/div>
+          &lt;/>
+        ) : (
+          &lt;ul className="basic-list">
+            {scores.map((score) => (
+              &lt;li className="list-item" key={score.id}>
+                &lt;div className={handleScoreColor(score.score)}>
+                  &lt;label className="label-margin">
+                    Score:
+                    &lt;span className="score">{score.score}&lt;/span>
+                  &lt;/label>
+                &lt;/div>
+                &lt;div className="data-vertical">
+                  &lt;div className="data-vertical-left">
+                    &lt;label className="label-margin">
+                      &lt;span className="score-id">Test: {score.id}&lt;/span>
+                    &lt;/label>
+                    &lt;label className="label-margin">
+                      &lt;span className="score-date">Date: {score.date}&lt;/span>
+                    &lt;/label>
+                  &lt;/div>
+
+                  &lt;div className="data-vertical-left">
+                    &lt;div className="data-vertical-right">
+                      &lt;label className="label-margin">
+                        Correct:
+                        &lt;span className="correct-words">
+                          {score.correct_words.split(",").map((word, index) => (
+                            &lt;span key={index} className="correct">
+                              {word}
+                              {index &lt;
+                                score.correct_words.split(",").length - 1 &amp;&amp;
+                                ", "}
+                            &lt;/span>
+                          ))}
+                        &lt;/span>
+                      &lt;/label>
+                    &lt;/div>
+                  &lt;/div>
+                  &lt;div className="data-vertical-left">
+                    &lt;div className="data-vertical-right">
+                      &lt;label className="label-margin">
+                        Incorrect:
+                        &lt;span className="incorrect-words">
+                          {score.incorrect_words
+                            .split(",")
+                            .map((word, index) => (
+                              &lt;span key={index} className="incorrect">
+                                {word}
+                                {index &lt;
+                                  score.incorrect_words.split(",").length - 1 &amp;&amp;
+                                  ", "}
+                              &lt;/span>
+                            ))}
+                        &lt;/span>
+                      &lt;/label>
+                    &lt;/div>
+                  &lt;/div>
+                &lt;/div>
+              &lt;/li>
+            ))}
+          &lt;/ul>
+        )}
+      &lt;/>
+    &lt;/>
+  );
+};
+
+export default ScoreBoardPageComponent;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AddWordsPageComponent">AddWordsPageComponent</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#FirstPageComponent">FirstPageComponent</a></li><li><a href="global.html#InspectWordsPageComponent">InspectWordsPageComponent</a></li><li><a href="global.html#MainPageComponent">MainPageComponent</a></li><li><a href="global.html#NavigationBar">NavigationBar</a></li><li><a href="global.html#PatchWordPageComponent">PatchWordPageComponent</a></li><li><a href="global.html#ResultsPageComponent">ResultsPageComponent</a></li><li><a href="global.html#ScoreBoardPageComponent">ScoreBoardPageComponent</a></li><li><a href="global.html#TestPageComponent">TestPageComponent</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 16:06:21 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

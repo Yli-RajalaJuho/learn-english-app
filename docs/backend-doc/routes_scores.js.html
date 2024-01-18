@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: routes/scores.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: routes/scores.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const database = require("../database/scoresFunctionsDB.js");
+const connections = require("../database/connectionsDB.js");
+const express = require("express");
+
+/**
+ * Express Router for handling score-related routes.
+ *
+ * @type {express.Router}
+ */
+const scoresRouter = express.Router();
+
+/**
+ * Save data to the database.
+ *
+ * @route POST /api/scores/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise&lt;void>} A Promise that resolves once the operation is complete.
+ */
+scoresRouter.post("/", async (req, res) => {
+  let connection = undefined;
+  try {
+    // Connect to the database
+    connection = await connections.connect();
+
+    // Save data to the database
+    const success = await database.save(connection, req.body);
+
+    // Result
+    res.sendStatus(success);
+  } catch (error) {
+    // Handle any errors that occur during connection, query, or response
+    if (error.code === 400) {
+      // If bad request show style for what the request should look like
+      res.status(error.code).send(error.message);
+    } else {
+      res.sendStatus(error);
+    }
+  } finally {
+    try {
+      // Close the database connection
+      connections.close(connection);
+    } catch (err) {
+      // Handle any errors that occur while closing the connection
+      res.sendStatus(500);
+    }
+  }
+});
+
+/**
+ * Retrieve all scores from the database.
+ *
+ * @route GET /api/scores/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise&lt;void>} A Promise that resolves once the operation is complete.
+ */
+scoresRouter.get("/", async (req, res) => {
+  let connection = undefined;
+  try {
+    // Get the search term from query parameters
+    const searchTerm = req.query.searchTerm;
+
+    // Check if there are sort query parameters
+    const sortOrder = req.query.sortOrder;
+
+    // Connect to the database
+    connection = await connections.connect();
+
+    // Search for the results
+    const scores = await database.findAll(connection, searchTerm, sortOrder);
+
+    // Result
+    res.json(scores);
+  } catch (error) {
+    // Handle any errors that occur during connection, query, or response
+    if (error.code === 404) {
+      // If not found show what id wasn't found
+      res.status(error.code).send(error.message);
+    } else {
+      res.sendStatus(error);
+    }
+  } finally {
+    try {
+      // Close the database connection
+      connections.close(connection);
+    } catch (err) {
+      // Handle any errors that occur while closing the connection
+      res.sendStatus(500);
+    }
+  }
+});
+
+/**
+ * Retrieve a score by its ID from the database.
+ *
+ * @route GET /api/scores/:myId([0-9]+)
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise&lt;void>} A Promise that resolves once the operation is complete.
+ */
+scoresRouter.get("/:myId([0-9]+)", async (req, res) => {
+  let connection = undefined;
+  try {
+    // Get the searched id
+    const id = parseInt(req.params.myId);
+
+    // Connect to the database
+    connection = await connections.connect();
+
+    // Search for the id
+    const score = await database.findById(connection, id);
+
+    // Result
+    res.json(score);
+  } catch (error) {
+    // Handle any errors that occur during connection, query, or response
+    if (error.code === 404) {
+      // If not found show what id wasn't found
+      res.status(error.code).send(error.message);
+    } else {
+      res.sendStatus(error);
+    }
+  } finally {
+    try {
+      // Close the database connection
+      connections.close(connection);
+    } catch (err) {
+      // Handle any errors that occur while closing the connection
+      res.sendStatus(500);
+    }
+  }
+});
+
+/**
+ * Delete all scores from the database.
+ *
+ * @route DELETE /api/scores/
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise&lt;void>} A Promise that resolves once the operation is complete.
+ */
+scoresRouter.delete("/", async (req, res) => {
+  let connection = undefined;
+  try {
+    // Connect to the database
+    connection = await connections.connect();
+
+    // Search for the id
+    const success = await database.deleteAll(connection);
+
+    // Result
+    res.sendStatus(success);
+  } catch (error) {
+    // Handle any errors that occur during connection, query, or response
+    res.sendStatus(error);
+  } finally {
+    try {
+      // Close the database connection
+      connections.close(connection);
+    } catch (err) {
+      // Handle any errors that occur while closing the connection
+      res.sendStatus(500);
+    }
+  }
+});
+
+/**
+ * Delete a score by its ID from the database.
+ *
+ * @route DELETE /api/scores/:myId([0-9]+)
+ * @function
+ * @async
+ * @param {express.Request} req - The Express request object.
+ * @param {express.Response} res - The Express response object.
+ * @returns {Promise&lt;void>} A Promise that resolves once the operation is complete.
+ */
+scoresRouter.delete("/:myId([0-9]+)", async (req, res) => {
+  let connection = undefined;
+  try {
+    // Get the searched id
+    const id = parseInt(req.params.myId);
+
+    // Connect to the database
+    connection = await connections.connect();
+
+    // Search for the id
+    const success = await database.deleteById(connection, id);
+
+    // Result
+    res.sendStatus(success);
+  } catch (error) {
+    // Handle any errors that occur during connection, query, or response
+    if (error.code === 404) {
+      // If not found show what id wasn't found
+      res.status(error.code).send(error.message);
+    } else {
+      res.sendStatus(error);
+    }
+  } finally {
+    try {
+      // Close the database connection
+      connections.close(connection);
+    } catch (err) {
+      // Handle any errors that occur while closing the connection
+      res.sendStatus(500);
+    }
+  }
+});
+
+module.exports = scoresRouter;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-connectionsDB.html">connectionsDB</a></li><li><a href="module-scoresFunctionsDB.html">scoresFunctionsDB</a></li><li><a href="module-wordsFunctionsDB.html">wordsFunctionsDB</a></li></ul><h3>Global</h3><ul><li><a href="global.html#base">base</a></li><li><a href="global.html#baseMinusTMin">baseMinusTMin</a></li><li><a href="global.html#connectionPool">connectionPool</a></li><li><a href="global.html#errors">errors</a></li><li><a href="global.html#gracefulShutdown">gracefulShutdown</a></li><li><a href="global.html#maxInt">maxInt</a></li><li><a href="global.html#port">port</a></li><li><a href="global.html#punycode">punycode</a></li><li><a href="global.html#regexPunycode">regexPunycode</a></li><li><a href="global.html#scoresRouter">scoresRouter</a></li><li><a href="global.html#server">server</a></li><li><a href="global.html#wordsRouter">wordsRouter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jan 18 2024 16:06:42 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
