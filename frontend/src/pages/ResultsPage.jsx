@@ -1,6 +1,7 @@
 import NavigationBar from "./NavigationBar";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 /**
  * React component for displaying test results.
@@ -9,6 +10,7 @@ import { useState, useEffect } from "react";
  * @returns {JSX.Element} JSX element representing the ResultsPageComponent.
  */
 const ResultsPageComponent = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { userResponses } = location.state || {};
 
@@ -20,6 +22,16 @@ const ResultsPageComponent = () => {
     date: "",
   });
   const [grade, setGrade] = useState("");
+
+  /**
+   * Handles transitioning to a different page.
+   *
+   * @param {string} path - The path to navigate to.
+   * @returns {void}
+   */
+  const handleTransition = (path) => {
+    navigate(path);
+  };
 
   /**
    * Effect hook that runs after every render.
@@ -117,6 +129,20 @@ const ResultsPageComponent = () => {
       <h1>Results</h1>
       <div className={`${grade}`}>
         <h3>Your got {newScore.score} words right!!!</h3>
+      </div>
+
+      <div className="left-center">
+        <div className="left-center">
+          <button onClick={() => handleTransition("/")}>back</button>
+        </div>
+        <div className="left-center">
+          <button
+            className="selected-button"
+            onClick={() => handleTransition("/scoreboard-page")}
+          >
+            Scoreboard
+          </button>
+        </div>
       </div>
 
       <ul>

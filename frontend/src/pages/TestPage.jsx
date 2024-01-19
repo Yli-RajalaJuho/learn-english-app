@@ -182,11 +182,21 @@ const TestPageComponent = () => {
           </li>
         ))}
       </ul>
-      <div className="center">
-        <button className="selected-button" onClick={() => handleButtonClick()}>
+      <div className="confirm-cancel">
+        <button
+          className="start-test"
+          type="button"
+          onClick={() => handleButtonClick()}
+        >
           Submit Answers
         </button>
-        <button onClick={() => handleTransition("/first-page")}>back</button>
+        <button
+          className="cancel-button"
+          type="button"
+          onClick={() => handleTransition("/first-page")}
+        >
+          back
+        </button>
       </div>
     </>
   );

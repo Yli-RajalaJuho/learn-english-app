@@ -266,11 +266,21 @@ const FirstPageComponent = () => {
           </div>
         </div>
 
-        <div className="center">
-          <button className="start-test" onClick={handleButtonClick}>
+        <div className="confirm-cancel">
+          <button
+            className="start-test"
+            type="button"
+            onClick={handleButtonClick}
+          >
             Start
           </button>
-          <button onClick={() => handleTransition("/")}>back</button>
+          <button
+            className="cancel-button"
+            type="button"
+            onClick={() => handleTransition("/")}
+          >
+            back
+          </button>
         </div>
       </div>
     </>
