@@ -1,9 +1,12 @@
 # Learn English
 
-## Link
+## Links
 
 This aplication is running at onrender.com:
-[learn-english-app](https://learn-english-app-jbhf.onrender.com)
+[learn english app](https://learn-english-app-jbhf.onrender.com)
+
+Video demonstrating the usage of the app:
+[walkthrough of the app](https://youtu.be/sQA73MaRZA4?si=x5m8VFTdx30Yuvzf)
 
 ## Overview
 
